@@ -1,0 +1,1 @@
+g++  -std=gnu++14 server_new.cpp -o server_new -fmax-errors=2 `pkg-config opencv --libs --cflags` -lcekeikon -lpthread -L/home/pi/cekeikon5/cekeikon/bin -I/home/pi/cekeikon5/cekeikon/src -O3 -s

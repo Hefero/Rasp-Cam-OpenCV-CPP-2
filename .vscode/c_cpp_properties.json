@@ -1,0 +1,73 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.22621.0",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30133/bin/Hostx86/x64/cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64",
+            "compilerArgs": [
+                "-g",
+                "-fmax-errors=2",
+                "-l opencv_calib3d2410.dll",
+                "-l opencv_contrib2410.dll",
+                "-l opencv_core2410.dll",
+                "-l opencv_features2d2410.dll",
+                "-l opencv_flann2410.dll",
+                "-l opencv_gpu2410.dll",
+                "-l opencv_highgui2410.dll",
+                "-l opencv_imgproc2410.dll",
+                "-l opencv_legacy2410.dll",
+                "-l opencv_ml2410.dll",
+                "-l opencv_nonfree2410.dll",
+                "-l opencv_objdetect2410.dll",
+                "-l opencv_ocl2410.dll",
+                "-l opencv_photo2410.dll",
+                "-l opencv_stitching2410.dll",
+                "-l opencv_superres2410.dll",
+                "-l opencv_video2410.dll",
+                "-l opencv_videostab2410.dll",
+                "-l cekeikon41 ",
+                "-O3",
+                "-s"
+            ],            
+            "mergeConfigurations": false
+        },
+        {
+            "name": "LinuxMint",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "${default}",
+            "compilerArgs": [
+                "-g",
+                "-std=gnu++14",
+                "-fmax-errors=2",
+                "-L/home/psi3422/cekeikon5/opencv2cpu/lib",
+                "-I/home/psi3422/cekeikon5/opencv2cpu/include",
+                " `pkg-config /home/psi3422/cekeikon5/opencv2cpu/lib/pkgconfig/opencv.pc --libs --cflags`",
+                "-lcekeikon2",
+                "-L/home/psi3422/cekeikon5/cekeikon/bin",
+                "-I/home/psi3422/cekeikon5/cekeikon/src",
+                "-O3",
+                "-s"
+            ]
+        }
+    ],
+    "version": 4
+}

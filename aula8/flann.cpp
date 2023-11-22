@@ -9,11 +9,11 @@ int main() {
   TimePoint t2=timePoint();
   vector<int> indices(1); vector<float> dists(1);
   for (int l=0; l<mnist.qx.rows; l++) {
-    ind.knnSearch(mnist.qx.row(l),indices,dists,1,flann::SearchParams(128));
+    ind.knnSearch(mnist.qx.row(l),indices,dists,1,flann::SearchParams(64));
     mnist.qp(l)=mnist.ay(indices[0]);
   }
 
-  Mat grayImg = imread("90.png", IMREAD_GRAYSCALE);
+  Mat grayImg = imread("1199.png", IMREAD_GRAYSCALE);
 
   Mat new_image = Mat::zeros( grayImg.size(), grayImg.type() );
   double alpha = 1.0; /*< Simple contrast control */

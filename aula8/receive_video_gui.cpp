@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 MNIST mnist(28, true, true);
 mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
 TimePoint t1=timePoint();
-flann::Index ind(mnist.ax,flann::KDTreeIndexParams(8));
+flann::Index ind(mnist.ax,flann::KDTreeIndexParams(4));
 TimePoint t2=timePoint();
 vector<int> indices(1); vector<float> dists(1);
 
@@ -57,31 +57,42 @@ rec.sendString("Keep Alive");
         
         if (rec.recvBytes(compressed) > 0){
             img = imdecode(compressed,1);
+            Mat imgCopy;
+            img.copyTo(imgCopy);
             detectAndDisplay(img, faces);
             //rec.sendString("Keep Alive");
 
             //Mat grayImg = imread("1199.png", IMREAD_GRAYSCALE);
-            Mat cropped_image = img(Range(faces[0].x,faces[0].x+faces[0].width), Range(faces[0].y,faces[0].y+faces[0].height));
-            Mat grayImg;
-            cv::cvtColor(cropped_image, grayImg, cv::COLOR_BGR2GRAY);
+            if (faces.size() > 0){
+                try {
+                    Mat cropped_image = imgCopy(Range(faces[0].y,faces[0].y+faces[0].height),Range(faces[0].x,faces[0].x+faces[0].width));
 
-            Mat new_image = Mat::zeros( grayImg.size(), grayImg.type() );
-            double alpha = 1.0; /*< Simple contrast control */
-            int beta = 0;       /*< Simple brightness control */
-            for( int y = 0; y < grayImg.rows; y++ ) {
-                for( int x = 0; x < grayImg.cols; x++ ) {
-                    for( int c = 0; c < grayImg.channels(); c++ ) {
-                        new_image.at<Vec3b>(y,x)[c] =
-                            saturate_cast<uchar>( alpha*grayImg.at<Vec3b>(y,x)[c] + beta );
+                    Mat new_image = Mat::zeros( cropped_image.size(), cropped_image.type() );
+                    double alpha = 1.0; /*< Simple contrast control */
+                    int beta = 0;       /*< Simple brightness control */
+                    for( int y = 0; y < cropped_image.rows; y++ ) {
+                        for( int x = 0; x < cropped_image.cols; x++ ) {
+                            for( int c = 0; c < cropped_image.channels(); c++ ) {
+                                new_image.at<Vec3b>(y,x)[c] =
+                                    saturate_cast<uchar>( alpha*cropped_image.at<Vec3b>(y,x)[c] + beta );
+                            }
+                        }
                     }
+
+                    Mat grayImg;
+                    cv::cvtColor(new_image, grayImg, cv::COLOR_BGR2GRAY);
+                    grayImg.copyTo(img);
+
+                    Mat cImg = new_image.reshape(1,1);
+                    Mat tmp;
+                    cImg.convertTo(tmp,CV_32FC1);
+                    ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(32));
+                    std::cout << mnist.ay(indices[0]) << std::endl;
+                }
+                catch(exception ex){
+
                 }
             }
-
-            Mat cImg = new_image.reshape(1,1);
-            Mat tmp;
-            cImg.convertTo(tmp,CV_32FC1);
-            ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(128));
-            std::cout << mnist.ay(indices[0]) << std::endl;
 
             sendFollow(rec, img, faces);
             //concatImg = grudaH(gui.a,img);

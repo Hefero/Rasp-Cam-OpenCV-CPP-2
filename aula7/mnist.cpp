@@ -5,12 +5,19 @@ int main() {
                               //crop bounding box=false
   mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
   //mnist.qp.setTo(-1); //Coloca respostas erradas de proposito para imprimir todas imagens
-  for (size_t i = 0; i < mnist.AX.size(); i++)
+  for (size_t i = 1; i < mnist.AX.size(); i++)
   {
-    if (mnist.AY[i] == 9){
+    int numberInt = 9;
+    string number = to_string(numberInt);
+    if (mnist.AY[i] == numberInt){
         Mat_<GRY> e=mnist.AX[i]; //Organiza 10000 imagens em 100 linhas e 100 colunas
-        string filename = "9/" +  to_string(i) + ".png";
+        string filename = number + "/p/" +  to_string(i) + ".png";
         imp(e,filename); //Imprime 10000 imagens-teste como visual.png
+    }
+    else{
+        Mat_<GRY> e=mnist.AX[i]; //Organiza 10000 imagens em 100 linhas e 100 colunas
+        string filename = number + "/n/" +  to_string(i) + ".png";
+        imp(e,filename);
     }
   }
 }

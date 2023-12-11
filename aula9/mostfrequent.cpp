@@ -23,32 +23,13 @@ int mostFrequent(int* arr, int n)
   
     return element_having_max_freq; 
 } 
-int calcMode(int array[], int array_size)
-{
-int topCount=0, count, topElement = 10;
 
-for ( int i=0 ; i<array_size ;i++)
-{
-    count=0;
-    for (int j=0 ; j<array_size ; j++)
-    {
-        if (array[i]==array[j]) count++;
-    }
-    if (count>=topCount)
-    {
-        topCount=count;
-        if (topElement > array[i])
-            topElement=array[i];
-    }
-}
 
-return topElement;
-}
 // Driver program 
 int main() 
 { 
     int arr[] = { 40, 50, 30, 40, 50, 30, 30};
-    int n = 6;//sizeof(arr) / sizeof(arr[0]); 
-    cout << calcMode(arr, n); 
+    int n = sizeof(arr) / sizeof(arr[0]); 
+    cout << mostFrequent(arr, n); 
     return 0; 
 } 

@@ -312,7 +312,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
         ellipse( frame, center, Size( faces[i].width/2, faces[i].height/2 ), 0, 0, 360, Scalar( 255, 0, 255 ), 4 );
         Mat faceROI = frame_gray( faces[i] );
         //-- In each face, detect eyes
-        if (detected > 0){
+        if (detected >= 0){
         cv::putText(frame, //target image
             to_string(detected), //text
             cv::Point(faces[i].x, faces[i].y), //top-left position

@@ -81,6 +81,10 @@ namedWindow("janela");
 setMouseCallback("janela", onMouseGui, &gui.mouse);
 int key = 0;
 
+namedWindow("cropped");
+namedWindow("mask");
+namedWindow("inner");
+
 auto start = std::chrono::high_resolution_clock::now();
 auto end = std::chrono::high_resolution_clock::now();
 
@@ -111,29 +115,22 @@ rec.sendString("Keep Alive");
 
                     Mat gray;
                     cvtColor(cropped_image, gray, COLOR_BGR2GRAY);
-
-
-                    //erode
-                    Mat eroded;
-                    int erosion_size = 1.0;
-                    Mat element = getStructuringElement( 0,
-                    Size( 2*erosion_size + 1, 2*erosion_size+1 ),
-                    Point( erosion_size, erosion_size ) );
-                    erode( gray, eroded, element );
-                    
                     //gammacorrection                    
                     Mat imageContrastHigh;                    
                     for (int i = 0; i <10; i++){
                         //contrast
-                        eroded.convertTo(imageContrastHigh, -1, 1.5, 0.1);
+                        gray.convertTo(imageContrastHigh, -1, 1.5, 0.1);
                         //gammacorrection
-                        gammaCorrection(imageContrastHigh, eroded, 0.6);                    
+                        gammaCorrection(imageContrastHigh, gray, 0.6);                    
                     }
 
                     //findcountours
 
+                    imshow("cropped",imageContrastHigh);
+
                     cv::Mat mask;
-                    cv::threshold(imageContrastHigh, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+                    cv::threshold(imageContrastHigh, mask, 20, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+                    imshow("mask",mask);
 
                     std::vector<std::vector<cv::Point>> contours;
                     std::vector<cv::Vec4i> hierarchy;
@@ -158,7 +155,7 @@ rec.sendString("Keep Alive");
                         }
                     }
 
-                    if(biggestContourIdx2 > 0 && cv::contourArea(contours[biggestContourIdx2]) > 4){
+                    if(biggestContourIdx1 > 0 && cv::contourArea(contours[biggestContourIdx1]) > 4){
                         //std::cout << "number framed" << std::endl;
                         cv::RotatedRect boundingBox = cv::minAreaRect(contours[biggestContourIdx2]);
                         // one thing to remark: this will compute the OUTER boundary box, so maybe you have to erode/dilate if you want something between the ragged lines
@@ -209,16 +206,27 @@ rec.sendString("Keep Alive");
 
 
                         ROI.copyTo(croppedImage);                
-                        imwrite("tess.png",ROI);
-                        croppedImage.copyTo(img);
+                        
+                        //croppedImage.copyTo(img);
 
                         int down_width = 14;
                         int down_height = 14;
                         Mat resized_down;
                         //resize down
-                        resize(img, resized_down, Size(down_width, down_height), INTER_LINEAR);
+                        resize(croppedImage, resized_down, Size(down_width, down_height), INTER_LINEAR);
 
-                        Mat cImg = resized_down.reshape(1,1);
+                        //erode
+                        Mat eroded;
+                        int erosion_size = 1.0;
+                        Mat element = getStructuringElement( 0,
+                        Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                        Point( erosion_size, erosion_size ) );
+                        erode( resized_down, eroded, element );
+
+                        imshow("inner",eroded);
+                        imwrite("tess.png",eroded);
+
+                        Mat cImg = eroded.reshape(1,1);
                         Mat tmp;    
                         cImg.convertTo(tmp,CV_32FC3);
                         ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(512));                        

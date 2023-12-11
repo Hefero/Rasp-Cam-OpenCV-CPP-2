@@ -13,23 +13,11 @@ int main() {
     mnist.qp(l)=mnist.ay(indices[0]);
   }
 
-  Mat grayImg = imread("1199.png", IMREAD_GRAYSCALE);
+  Mat grayImg = imread("3.png", IMREAD_GRAYSCALE);
 
-  Mat new_image = Mat::zeros( grayImg.size(), grayImg.type() );
-  double alpha = 1.0; /*< Simple contrast control */
-  int beta = 0;       /*< Simple brightness control */
-  for( int y = 0; y < grayImg.rows; y++ ) {
-      for( int x = 0; x < grayImg.cols; x++ ) {
-          for( int c = 0; c < grayImg.channels(); c++ ) {
-              new_image.at<Vec3b>(y,x)[c] =
-                saturate_cast<uchar>( alpha*grayImg.at<Vec3b>(y,x)[c] + beta );
-          }
-      }
-  }
-
-  Mat cImg = new_image.reshape(1,1);
+  Mat cImg = grayImg.reshape(1,1);
   Mat tmp;
-  cImg.convertTo(tmp,CV_32FC1);
+  cImg.convertTo(tmp,CV_32FC3);
   ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(128));
 
   TimePoint t3=timePoint();

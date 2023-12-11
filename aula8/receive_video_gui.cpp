@@ -23,6 +23,18 @@ void onMouseGui(int event, int x, int y, int flags, void* userdata)
     }
     
 }
+void gammaCorrection(const Mat &src, Mat &dst, const float gamma)
+{
+    float invGamma = 1 / gamma;
+
+    Mat table(1, 256, CV_8U);
+    uchar *p = table.ptr();
+    for (int i = 0; i < 256; ++i) {
+        p[i] = (uchar) (pow(i / 255.0, invGamma) * 255);
+    }
+
+    LUT(src, table, dst);
+}
 
 int main(int argc, char** argv)
 {
@@ -59,31 +71,52 @@ rec.sendString("Keep Alive");
             img = imdecode(compressed,1);
             Mat imgCopy;
             img.copyTo(imgCopy);
-            detectAndDisplay(img, faces);
+            //detectAndDisplay(img, faces);
             //rec.sendString("Keep Alive");
+            
 
             //Mat grayImg = imread("1199.png", IMREAD_GRAYSCALE);
             if (faces.size() > 0){
                 try {
-                    Mat cropped_image = imgCopy(Range(faces[0].y,faces[0].y+faces[0].height),Range(faces[0].x,faces[0].x+faces[0].width));
+                    int padding = 27;
+                    Mat cropped_image = imgCopy(Range(faces[0].y-padding,faces[0].y+faces[0].height+padding),Range(faces[0].x-padding,faces[0].x+faces[0].width+padding));
+                    Mat gray;
+                    cvtColor(cropped_image, gray, COLOR_BGR2GRAY);
 
-                    Mat new_image = Mat::zeros( cropped_image.size(), cropped_image.type() );
-                    double alpha = 1.0; /*< Simple contrast control */
-                    int beta = 0;       /*< Simple brightness control */
-                    for( int y = 0; y < cropped_image.rows; y++ ) {
-                        for( int x = 0; x < cropped_image.cols; x++ ) {
-                            for( int c = 0; c < cropped_image.channels(); c++ ) {
-                                new_image.at<Vec3b>(y,x)[c] =
-                                    saturate_cast<uchar>( alpha*cropped_image.at<Vec3b>(y,x)[c] + beta );
-                            }
-                        }
-                    }
+                    int down_width = 28;
+                    int down_height = 28;
+                    Mat resize_down;
+                    
+                    // resize down
+                    resize(cropped_image, resize_down, Size(down_width, down_height), INTER_LINEAR);
 
                     Mat grayImg;
-                    cv::cvtColor(new_image, grayImg, cv::COLOR_BGR2GRAY);
-                    grayImg.copyTo(img);
+                    cv::cvtColor(resize_down, grayImg, cv::COLOR_BGR2GRAY);
 
-                    Mat cImg = new_image.reshape(1,1);
+                    //Mat new_image = Mat::zeros( grayImg.size(), grayImg.type() );
+                    //double alpha = 1.0; /*< Simple contrast control */
+                    //int beta = 0;       /*< Simple brightness control */
+                    //for( int y = 0; y < grayImg.rows; y++ ) {
+                    //    for( int x = 0; x < grayImg.cols; x++ ) {
+                    //        for( int c = 0; c < grayImg.channels(); c++ ) {
+                    //            new_image.at<Vec3b>(y,x)[c] =
+                    //                saturate_cast<uchar>( alpha*grayImg.at<Vec3b>(y,x)[c] + beta );
+                    //        }
+                    //    }
+                    //}
+                    Mat eroded;
+                    int erosion_size = 1;
+                    Mat element = getStructuringElement( 0,
+                    Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                    Point( erosion_size, erosion_size ) );
+                    erode( gray, eroded, element );
+
+                    Mat gammaImg;
+                    gammaCorrection(eroded, gammaImg, 0.75);
+
+                    //gammaImg.copyTo(img);
+
+                    Mat cImg = gammaImg.reshape(1,1);
                     Mat tmp;
                     cImg.convertTo(tmp,CV_32FC1);
                     ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(32));

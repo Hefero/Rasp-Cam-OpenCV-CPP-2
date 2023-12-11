@@ -7,7 +7,7 @@ int main() {
   //mnist.qp.setTo(-1); //Coloca respostas erradas de proposito para imprimir todas imagens
   for (size_t i = 1; i < mnist.AX.size(); i++)
   {
-    int numberInt = 9;
+    int numberInt = 8;
     string number = to_string(numberInt);
     if (mnist.AY[i] == numberInt){
         Mat_<GRY> e=mnist.AX[i]; //Organiza 10000 imagens em 100 linhas e 100 colunas

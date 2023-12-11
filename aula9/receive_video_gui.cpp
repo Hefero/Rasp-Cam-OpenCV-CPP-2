@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 MNIST mnist(14, true, true);
 mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
 TimePoint t1=timePoint();
-flann::Index ind(mnist.ax,flann::KDTreeIndexParams(32));
+flann::Index ind(mnist.ax,flann::KDTreeIndexParams(16));
 TimePoint t2=timePoint();
 vector<int> indices(1); vector<float> dists(1);
 
@@ -103,50 +103,37 @@ rec.sendString("Keep Alive");
                     //int areaImg = 10000/faces[0].width*faces[0].height;
                     int padding = 0;
                     //int padding = areaImg;
-                    Mat cropped_image = imgCopy(Range(faces[0].y-padding,faces[0].y+faces[0].height+padding),Range(faces[0].x-padding,faces[0].x+faces[0].width+padding));
+                    
+                    //Mat cropped_image = imgCopy(Range(faces[0].y-padding,faces[0].y+faces[0].height+padding),Range(faces[0].x-padding,faces[0].x+faces[0].width+padding));
+                    int startX1=faces[0].x,startY1=faces[0].y,width1=faces[0].width,height1=faces[0].height;
+                    //std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
+                    Mat cropped_image(imgCopy, Rect(startX1,startY1,width1,height1));
+
                     Mat gray;
                     cvtColor(cropped_image, gray, COLOR_BGR2GRAY);
 
 
                     //erode
                     Mat eroded;
-                    int erosion_size = 1;
+                    int erosion_size = 1.0;
                     Mat element = getStructuringElement( 0,
                     Size( 2*erosion_size + 1, 2*erosion_size+1 ),
                     Point( erosion_size, erosion_size ) );
                     erode( gray, eroded, element );
                     
-                    //gammacorrection
-                    Mat gammaImg;
-                    gammaCorrection(eroded, gammaImg, 0.8);
-                    Mat imageContrastHigh2;
-                    
-                    //contrast
-                    gammaImg.convertTo(imageContrastHigh2, -1, 2, 0.1);
-
-                    //erode
-                    element = getStructuringElement( 0,
-                    Size( 2*erosion_size + 1, 2*erosion_size+1 ),
-                    Point( erosion_size, erosion_size ) );
-                    erode( imageContrastHigh2, eroded, element );
-
-
-                    //gammacorrection
-                    gammaCorrection(eroded, gammaImg, 0.8);
-                    
-                    for (int i = 0; i <5; i++){
+                    //gammacorrection                    
+                    Mat imageContrastHigh;                    
+                    for (int i = 0; i <10; i++){
                         //contrast
-                        gammaImg.convertTo(imageContrastHigh2, -1, 1.5, 0.1);
-
+                        eroded.convertTo(imageContrastHigh, -1, 1.5, 0.1);
                         //gammacorrection
-                        gammaCorrection(imageContrastHigh2, gammaImg, 0.6);
-                    
+                        gammaCorrection(imageContrastHigh, eroded, 0.6);                    
                     }
 
                     //findcountours
 
                     cv::Mat mask;
-                    cv::threshold(imageContrastHigh2, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+                    cv::threshold(imageContrastHigh, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
 
                     std::vector<std::vector<cv::Point>> contours;
                     std::vector<cv::Vec4i> hierarchy;
@@ -213,7 +200,7 @@ rec.sendString("Keep Alive");
 
                         int startX=corners[1].x,startY=corners[1].y,width=corners[2].x-corners[1].x,height=corners[3].y-corners[1].y;
                         std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
-                        Mat ROI(gammaImg, Rect(startX,startY,width,height));
+                        Mat ROI(imageContrastHigh, Rect(startX,startY,width,height));
 
 
                         
@@ -224,10 +211,17 @@ rec.sendString("Keep Alive");
                         ROI.copyTo(croppedImage);                
                         imwrite("tess.png",ROI);
                         croppedImage.copyTo(img);
-                        Mat cImg = croppedImage.reshape(1,1);
-                        Mat tmp;
-                        cImg.convertTo(tmp,CV_32FC1);
-                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(512));
+
+                        int down_width = 14;
+                        int down_height = 14;
+                        Mat resized_down;
+                        //resize down
+                        resize(img, resized_down, Size(down_width, down_height), INTER_LINEAR);
+
+                        Mat cImg = resized_down.reshape(1,1);
+                        Mat tmp;    
+                        cImg.convertTo(tmp,CV_32FC3);
+                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(512));                        
                         std::cout << mnist.ay(indices[0]) << std::endl;
                     }
 

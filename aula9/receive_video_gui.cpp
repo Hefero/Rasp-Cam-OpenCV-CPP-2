@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <string>
 #include <array>
+#include <bits/stdc++.h> 
 
 Mygui gui;
 
@@ -28,7 +29,7 @@ std::string exec(const char* cmd) {
     return result;
 }
 
-void detectAndDisplay( Mat& frame, std::vector<Rect>& faces );
+void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected );
 void sendCommand(Receiver& rec, Mygui& gui);
 void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces);
 void onMouseGui(int event, int x, int y, int flags, void* userdata)
@@ -54,17 +55,39 @@ void gammaCorrection(const Mat &src, Mat &dst, const float gamma)
 
     LUT(src, table, dst);
 }
+int mostFrequent(int* arr, int n) 
+{ 
+    // code here     
+    int maxcount = 0; 
+    int element_having_max_freq; 
+    for (int i = 0; i < n; i++) { 
+        int count = 0; 
+        for (int j = 0; j < n; j++) { 
+            if (arr[i] == arr[j]) 
+                count++; 
+        } 
+  
+        if (count > maxcount) { 
+            maxcount = count; 
+            element_having_max_freq = arr[i]; 
+        } 
+    }
+    return element_having_max_freq; 
+} 
 
+
+int outputNumber[20];
+int output_index = 0;
 int main(int argc, char** argv)
 {
 MNIST mnist(28, true, true);
 mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
 TimePoint t1=timePoint();
-flann::Index ind(mnist.ax,flann::KDTreeIndexParams(32));
+flann::Index ind(mnist.ax,flann::KDTreeIndexParams(8));
 TimePoint t2=timePoint();
 vector<int> indices(1); vector<float> dists(1);
 
-
+int counter = 0;
 
 
 
@@ -80,7 +103,7 @@ cascade.load("haar.xml");
 namedWindow("janela");
 setMouseCallback("janela", onMouseGui, &gui.mouse);
 int key = 0;
-
+int mostFreq = -1;
 namedWindow("cropped");
 namedWindow("mask");
 namedWindow("inner");
@@ -97,7 +120,7 @@ rec.sendString("Keep Alive");
             img = imdecode(compressed,1);
             Mat imgCopy;
             img.copyTo(imgCopy);
-            detectAndDisplay(img, faces);
+            detectAndDisplay(img, faces, mostFreq);
             //rec.sendString("Keep Alive");
             
 
@@ -233,15 +256,27 @@ rec.sendString("Keep Alive");
                         Mat cImg = resized_down.reshape(1,1);
                         Mat tmp;    
                         cImg.convertTo(tmp,CV_32FC3);
-                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(1024));                        
-                        std::cout << mnist.ay(indices[0]) << std::endl;
-                    }
+                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(64));                        
+                        
 
-                  
+                        outputNumber[output_index] = int(mnist.ay(indices[0]));
+                        output_index++;
+                        if(output_index == 20){
+                            output_index = 0;
+                            int n = sizeof(outputNumber) / sizeof(outputNumber[0]);
+                            mostFreq = mostFrequent(outputNumber, n);
+                            std::cout << mostFreq << std::endl;
+                        }
+                    }                  
                 }
                 catch(exception ex){
 
                 }
+            }
+
+            else{
+                output_index = 0;
+                mostFreq = -1;
             }
 
             sendFollow(rec, img, faces);
@@ -262,7 +297,7 @@ rec.sendString("Keep Alive");
  }
 }
 
-void detectAndDisplay( Mat& frame, std::vector<Rect>& faces )
+void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
 {
     Mat frame_gray;
     cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
@@ -277,13 +312,15 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces )
         ellipse( frame, center, Size( faces[i].width/2, faces[i].height/2 ), 0, 0, 360, Scalar( 255, 0, 255 ), 4 );
         Mat faceROI = frame_gray( faces[i] );
         //-- In each face, detect eyes
+        if (detected > 0){
         cv::putText(frame, //target image
-            to_string(faces[i].width), //text
+            to_string(detected), //text
             cv::Point(faces[i].x, faces[i].y), //top-left position
             cv::FONT_HERSHEY_DUPLEX,
             1.0,
-            CV_RGB(118, 185, 0), //font color
+            CV_RGB(255, 0, 0), //font color
             2);
+        }
 
     }
     //-- Show what you got

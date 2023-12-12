@@ -99,8 +99,12 @@ std::vector<Rect> faces;
 vector<unsigned char> compressed;
 
 //mats
-Mat concatImg = Mat::zeros(480+480, 640, CV_8UC3);
-Mat ImgSize = Mat::zeros(320, 320, CV_8UC3);
+Mat concatImg = Mat::zeros(480, 640+240, CV_8UC3);
+Mat concatImg1 = Mat::zeros(480, 240, CV_8UC3);
+Mat ImgSize = Mat::zeros(240, 240, CV_8UC3);
+Mat resize_upM = Mat::zeros(240, 240, CV_8UC3);
+Mat resize_upE = Mat::zeros(240, 240, CV_8UC3);
+Mat resize_up = Mat::zeros(240, 240, CV_8UC3);
 Mat resized_down;
 cv::Mat mask;
 Mat eroded;
@@ -111,9 +115,8 @@ namedWindow("janela");
 setMouseCallback("janela", onMouseGui, &gui.mouse);
 int key = 0;
 int mostFreq = -1;
-namedWindow("cropped");
-namedWindow("mask");
-namedWindow("inner");
+//namedWindow("mask");
+//namedWindow("inner");
 
 auto start = std::chrono::high_resolution_clock::now();
 auto end = std::chrono::high_resolution_clock::now();
@@ -165,11 +168,14 @@ rec.sendString("Keep Alive");
                     }
 
                     //findcountours
-
-                    imshow("cropped",eroded);
+                    //Mat resize_upE;
+                    //resize(eroded, resize_upE, ImgSize.size(), INTER_LINEAR);
+                    //imshow("cropped",resize_upE);
                     
                     cv::threshold(eroded, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
-                    imshow("mask",mask);
+                    Mat resize_upM;
+                    resize(eroded, resize_upM, ImgSize.size(), INTER_LINEAR);                    
+                    //imshow("mask",resize_upM);
 
                     std::vector<std::vector<cv::Point>> contours;
                     std::vector<cv::Vec4i> hierarchy;
@@ -253,10 +259,20 @@ rec.sendString("Keep Alive");
                         //resize down
                         resize(croppedImage, resized_down, Size(down_width, down_height), INTER_LINEAR);
 
+                        
+                        resize(croppedImage, resize_up, ImgSize.size(), INTER_LINEAR);
 
-                        imshow("inner",resized_down);
+
+                        
                         //imwrite("tess.png",resized_down);
+                        vconcat(resize_upM,resize_up,concatImg1);
+                        //imshow("inner",concatImg1);
 
+                        Mat colorDig = Mat::zeros(480, 240, CV_8UC3);                        
+                        cvtColor(concatImg1, colorDig, COLOR_GRAY2BGR);
+
+                        hconcat(img,colorDig,concatImg);
+                        imshow("janela",concatImg);
                         Mat cImg = resized_down.reshape(1,1);
                         Mat tmp;    
                         cImg.convertTo(tmp,CV_32FC3);
@@ -281,11 +297,11 @@ rec.sendString("Keep Alive");
             else{
                 output_index = 0;
                 mostFreq = -1;
-            }
-
-            sendFollow(rec, img, faces);
-
-            imshow("janela",img);
+                imshow("janela",img);
+            }            
+            sendFollow(rec, img, faces);            
+            Mat H;
+            //hconcat(img,V,H);            
             end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> duration = end - start;
             start = std::chrono::high_resolution_clock::now();

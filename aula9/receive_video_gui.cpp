@@ -90,7 +90,13 @@ vector<int> indices(1); vector<float> dists(1);
 int counter = 0;
 
 
+VideoCapture vid_capture("capturado.avi");
+int ex = static_cast<int>(vid_capture.get(CV_CAP_PROP_FOURCC));
 
+VideoWriter outputVideo;
+Size S = Size(640+240,    //Acquire input size
+              480);
+outputVideo.open("receive.avi" , ex, vid_capture.get(CV_CAP_PROP_FPS),S, true);
 
 Receiver rec(argc, argv);
 
@@ -309,7 +315,7 @@ rec.sendString("Keep Alive");
             start = std::chrono::high_resolution_clock::now();
             double fps = 1.0/duration.count();
             std::cout << "Estimated FPS: " << fps << std::endl;
-
+            outputVideo.write(concatImg);
         }
     }
     catch(cv::Exception ex){

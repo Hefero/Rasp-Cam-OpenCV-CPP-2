@@ -12,6 +12,7 @@
 #include <array>
 #include <bits/stdc++.h> 
 
+
 Mygui gui;
 
 CascadeClassifier cascade;
@@ -76,18 +77,19 @@ int mostFrequent(int* arr, int n)
 } 
 
 
-int outputNumber[10];
+int outputNumber[25];
 int output_index = 0;
 int main(int argc, char** argv)
 {
 MNIST mnist(28, true, true);
 mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
 TimePoint t1=timePoint();
-flann::Index ind(mnist.ax,flann::KDTreeIndexParams(32));
+flann::Index ind(mnist.ax,flann::KDTreeIndexParams(4));
 TimePoint t2=timePoint();
 vector<int> indices(1); vector<float> dists(1);
 
 int counter = 0;
+
 
 
 
@@ -125,6 +127,12 @@ auto end = std::chrono::high_resolution_clock::now();
 //rec.sendString("Keep Alive");
 
 VideoCapture vid_capture("capturado.avi");
+int ex = static_cast<int>(vid_capture.get(CV_CAP_PROP_FOURCC));
+
+VideoWriter outputVideo;
+Size S = Size(640+240,    //Acquire input size
+              480);
+outputVideo.open("process_video.avi" , ex, vid_capture.get(CV_CAP_PROP_FPS),S, true);
 
  while (vid_capture.isOpened()) {
     try{
@@ -212,7 +220,7 @@ VideoCapture vid_capture("capturado.avi");
                         }
                     }
 
-                    if(biggestContourIdx1 > 0 && cv::contourArea(contours[biggestContourIdx1]) > 400){
+                    if(biggestContourIdx1 > 0 && cv::contourArea(contours[biggestContourIdx1]) > 50*50){
                         //std::cout << "number framed" << std::endl;
                         cv::RotatedRect boundingBox = cv::minAreaRect(contours[biggestContourIdx2]);
                         // one thing to remark: this will compute the OUTER boundary box, so maybe you have to erode/dilate if you want something between the ragged lines
@@ -254,15 +262,14 @@ VideoCapture vid_capture("capturado.avi");
 
                         int startX=corners[1].x,startY=corners[1].y,width=corners[2].x-corners[1].x,height=corners[3].y-corners[1].y;
                         std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
-                        Mat ROI(eroded, Rect(startX,startY,width,height));
+                        Mat croppedImage  = Mat::zeros(10, 10, CV_8UC3);;          // Copy the data into new matrix
+                        try {
+                            Mat ROI(eroded, Rect(startX,startY,width,height));
+                            ROI.copyTo(croppedImage);
+                        }
+                        catch(exception ex){
 
-
-                        
-
-                        Mat croppedImage;          // Copy the data into new matrix
-
-
-                        ROI.copyTo(croppedImage);                
+                        }
                         
                         //croppedImage.copyTo(img);
 
@@ -277,23 +284,32 @@ VideoCapture vid_capture("capturado.avi");
 
                         
                         //imwrite("tess.png",resized_down);
-                        vconcat(resize_upM,resize_up,concatImg1);
+                        try{
+                            vconcat(resize_upM,resize_up,concatImg1);
+                        }
+                        catch(exception ex){
+
+                        }
                         //imshow("inner",concatImg1);
 
                         Mat colorDig = Mat::zeros(480, 240, CV_8UC3);                        
                         cvtColor(concatImg1, colorDig, COLOR_GRAY2BGR);
+                        try{
+                            hconcat(img,colorDig,concatImg);
+                        }
+                        catch(exception ex){
 
-                        hconcat(img,colorDig,concatImg);
+                        }
                         imshow("janela",concatImg);
                         Mat cImg = resized_down.reshape(1,1);
                         Mat tmp;    
                         cImg.convertTo(tmp,CV_32FC3);
-                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(256));                        
+                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(32));                        
                         
 
                         outputNumber[output_index] = int(mnist.ay(indices[0]));
                         output_index++;
-                        if(output_index == 10){
+                        if(output_index == 25){
                             output_index = 0;
                             int n = sizeof(outputNumber) / sizeof(outputNumber[0]);
                             mostFreq = mostFrequent(outputNumber, n);
@@ -302,16 +318,21 @@ VideoCapture vid_capture("capturado.avi");
                     }                  
                 }
                 catch(exception ex){
-
+                    continue;
                 }
             }
 
             else{
                 output_index = 0; 
                 mostFreq = -1;
-                hconcat(img,concatImgZ,concatImg);
+                try{
+                    hconcat(img,concatImgZ,concatImg);
+                }
+                catch(exception ex){
+
+                }
                 imshow("janela",concatImg);
-            }            
+            }
             //sendFollow(rec, img, faces);            
             Mat H;
             //hconcat(img,V,H);            
@@ -321,11 +342,16 @@ VideoCapture vid_capture("capturado.avi");
             double fps = 1.0/duration.count();
             std::cout << "Estimated FPS: " << fps << std::endl;
 
-        //}
+            
+
+
+        outputVideo.write(concatImg);
     }
     catch(cv::Exception ex){
-            continue;
-    }
+        outputVideo.write(concatImg);
+        continue;
+    }    
+
     if (key = cv::waitKey(1) >= 0) break;
  }
 }

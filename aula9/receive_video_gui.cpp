@@ -255,7 +255,7 @@ rec.sendString("Keep Alive");
 
 
                         imshow("inner",resized_down);
-                        imwrite("tess.png",resized_down);
+                        //imwrite("tess.png",resized_down);
 
                         Mat cImg = resized_down.reshape(1,1);
                         Mat tmp;    

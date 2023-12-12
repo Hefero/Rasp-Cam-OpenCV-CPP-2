@@ -101,6 +101,7 @@ vector<unsigned char> compressed;
 //mats
 Mat concatImg = Mat::zeros(480, 640+240, CV_8UC3);
 Mat concatImg1 = Mat::zeros(480, 240, CV_8UC3);
+Mat concatImgZ = Mat::zeros(480, 240, CV_8UC3);
 Mat ImgSize = Mat::zeros(240, 240, CV_8UC3);
 Mat resize_upM = Mat::zeros(240, 240, CV_8UC3);
 Mat resize_upE = Mat::zeros(240, 240, CV_8UC3);
@@ -297,7 +298,8 @@ rec.sendString("Keep Alive");
             else{
                 output_index = 0;
                 mostFreq = -1;
-                imshow("janela",img);
+                hconcat(img,concatImgZ,concatImg);
+                imshow("janela",concatImg);
             }            
             sendFollow(rec, img, faces);            
             Mat H;

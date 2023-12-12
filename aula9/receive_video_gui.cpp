@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 MNIST mnist(28, true, true);
 mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
 TimePoint t1=timePoint();
-flann::Index ind(mnist.ax,flann::KDTreeIndexParams(8));
+flann::Index ind(mnist.ax,flann::KDTreeIndexParams(16));
 TimePoint t2=timePoint();
 vector<int> indices(1); vector<float> dists(1);
 
@@ -201,7 +201,7 @@ rec.sendString("Keep Alive");
                         }
                     }
 
-                    if(biggestContourIdx1 > 0 && cv::contourArea(contours[biggestContourIdx1]) > 4){
+                    if(biggestContourIdx1 > 0 && cv::contourArea(contours[biggestContourIdx1]) > 100){
                         //std::cout << "number framed" << std::endl;
                         cv::RotatedRect boundingBox = cv::minAreaRect(contours[biggestContourIdx2]);
                         // one thing to remark: this will compute the OUTER boundary box, so maybe you have to erode/dilate if you want something between the ragged lines
@@ -277,7 +277,7 @@ rec.sendString("Keep Alive");
                         Mat cImg = resized_down.reshape(1,1);
                         Mat tmp;    
                         cImg.convertTo(tmp,CV_32FC3);
-                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(64));                        
+                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(512));                        
                         
 
                         outputNumber[output_index] = int(mnist.ay(indices[0]));

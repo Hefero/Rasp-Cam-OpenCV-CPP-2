@@ -97,7 +97,14 @@ Receiver rec(argc, argv);
 Mat img = Mat::zeros(480 , 640, CV_8UC3);
 std::vector<Rect> faces;
 vector<unsigned char> compressed;
-Mat concatImg = Mat::zeros(480+480 , 640, CV_8UC3);
+
+//mats
+Mat concatImg = Mat::zeros(480+480, 640, CV_8UC3);
+Mat ImgSize = Mat::zeros(320, 320, CV_8UC3);
+Mat resized_down;
+cv::Mat mask;
+Mat eroded;
+
 cascade.load("haar.xml");
 
 namedWindow("janela");
@@ -140,8 +147,7 @@ rec.sendString("Keep Alive");
                     Mat gray;
                     cvtColor(cropped_image, gray, COLOR_BGR2GRAY);
 
-                    //erode
-                    Mat eroded;
+                    //erode                    
                     int erosion_size = 1.0;
                     Mat element = getStructuringElement( 0,
                     Size( 2*erosion_size + 1, 2*erosion_size+1 ),
@@ -161,8 +167,7 @@ rec.sendString("Keep Alive");
                     //findcountours
 
                     imshow("cropped",eroded);
-
-                    cv::Mat mask;
+                    
                     cv::threshold(eroded, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
                     imshow("mask",mask);
 
@@ -244,8 +249,7 @@ rec.sendString("Keep Alive");
                         //croppedImage.copyTo(img);
 
                         int down_width = 28;
-                        int down_height = 28;
-                        Mat resized_down;
+                        int down_height = 28;                        
                         //resize down
                         resize(croppedImage, resized_down, Size(down_width, down_height), INTER_LINEAR);
 
@@ -280,7 +284,7 @@ rec.sendString("Keep Alive");
             }
 
             sendFollow(rec, img, faces);
-            //concatImg = grudaH(gui.a,img);
+
             imshow("janela",img);
             end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> duration = end - start;

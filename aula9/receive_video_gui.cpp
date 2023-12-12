@@ -76,7 +76,7 @@ int mostFrequent(int* arr, int n)
 } 
 
 
-int outputNumber[20];
+int outputNumber[10];
 int output_index = 0;
 int main(int argc, char** argv)
 {
@@ -282,7 +282,7 @@ rec.sendString("Keep Alive");
 
                         outputNumber[output_index] = int(mnist.ay(indices[0]));
                         output_index++;
-                        if(output_index == 20){
+                        if(output_index == 10){
                             output_index = 0;
                             int n = sizeof(outputNumber) / sizeof(outputNumber[0]);
                             mostFreq = mostFrequent(outputNumber, n);

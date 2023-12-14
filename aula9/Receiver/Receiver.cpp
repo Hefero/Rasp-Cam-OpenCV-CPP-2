@@ -114,7 +114,7 @@ int Receiver::recvBytes(vector<unsigned char>& storage){
                 storage.resize(bytesSize);
                 int result = recv(sokt, storage.data(), bytesSize, MSG_WAITALL);
                 if (result == bytesSize) {                
-                    std::cout << "received number of bytes: " << result << std::endl;
+                    //std::cout << "received number of bytes: " << result << std::endl;
                     //sendInt(bytesSize); //send confirmation of received
                     return result;       
                 } else {

@@ -67,15 +67,15 @@ Botao::Botao(Point _p, Point _q, string _st0, string _st1, bool _ligado)
 void Botao::testaDesenha(Mat_<Vec3b>& a, Mouse mouse)
 { if (primeiraVez || (p.x<=mouse.x && mouse.x<=q.x && p.y<=mouse.y && mouse.y<=q.y)) {
  if (ligado) {
- ligado=false;
+    ligado=false;
  rectangle(a, p,q, Scalar(192,192,192), CV_FILLED);
  line(a, p, Point(p.x,q.y), Scalar(255,255,255), 0);
  line(a, p, Point(q.x,p.y), Scalar(255,255,255), 0);
  line(a, q, Point(p.x,q.y), Scalar(0,0,0), 0);
  line(a, q, Point(q.x,p.y), Scalar(0,0,0), 0); 
  putText(a, st0, Point(p.x+5,(p.y+q.y)/2), FONT_HERSHEY_SIMPLEX, 1, Scalar(0,0,0), 2);
- } else {
- ligado=true;
+ } else { 
+    ligado = true;
  rectangle(a, p,q, Scalar(128,255,255), CV_FILLED);
  line(a, p, Point(p.x,q.y), Scalar(0,0,0), 0);
  line(a, p, Point(q.x,p.y), Scalar(0,0,0), 0);
@@ -100,7 +100,7 @@ int main()
  Botao b5(Point(70,300),Point(160,410),"");
 
  Botao b2(Point(270, 60),Point(360,160),""); 
- Botao b4(Point(270,180),Point(360,280),""); 
+ Botao b4(Point(270,180),Point(360,280),"",""); 
  Botao b6(Point(270,300),Point(360,410),"");
 
 

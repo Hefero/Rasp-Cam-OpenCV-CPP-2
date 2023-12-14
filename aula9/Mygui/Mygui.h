@@ -15,7 +15,7 @@ public:
     Botao b5 = Botao(Point(70,300),Point(160,410),"","",false);
 
     Botao b2 = Botao(Point(270, 60),Point(360,160),"","",false); 
-    Botao b4 = Botao(Point(270,180),Point(360,280),"","",false); 
+    Botao b4 = Botao(Point(270,180),Point(360,280),"Mode","Mode",false); 
     Botao b6 = Botao(Point(270,300),Point(360,410),"","",false);
                 
     Botao b7 = Botao(Point(470, 60),Point(560,160),"","",false);

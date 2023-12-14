@@ -30,13 +30,19 @@ void Botao::testaDesenha(Mat_<Vec3b>& a, Mouse mouse)
         }
         primeiraVez=false;
     }
+    /*
     if (mouse.up) {
-        ligado=false;
-        rectangle(a, p,q, Scalar(192,192,192), CV_FILLED);
-        line(a, p, Point(p.x,q.y), Scalar(255,255,255), 0);
-        line(a, p, Point(q.x,p.y), Scalar(255,255,255), 0);
-        line(a, q, Point(p.x,q.y), Scalar(0,0,0), 0);
-        line(a, q, Point(q.x,p.y), Scalar(0,0,0), 0); 
-        putText(a, st0, Point(p.x+5,(p.y+q.y)/2), FONT_HERSHEY_SIMPLEX, 1, Scalar(0,0,0), 2);
+        if ((270<=mouse.x && mouse.x<=360 && 180<=mouse.y && mouse.y<=280)){
+        }
+        else {
+            ligado=false;
+            rectangle(a, p,q, Scalar(192,192,192), CV_FILLED);
+            line(a, p, Point(p.x,q.y), Scalar(255,255,255), 0);
+            line(a, p, Point(q.x,p.y), Scalar(255,255,255), 0);
+            line(a, q, Point(p.x,q.y), Scalar(0,0,0), 0);
+            line(a, q, Point(q.x,p.y), Scalar(0,0,0), 0); 
+            putText(a, st0, Point(p.x+5,(p.y+q.y)/2), FONT_HERSHEY_SIMPLEX, 1, Scalar(0,0,0), 2);
+        }
     }
+    */
 }

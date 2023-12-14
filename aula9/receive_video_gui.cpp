@@ -76,14 +76,15 @@ int mostFrequent(int* arr, int n)
 } 
 
 
-int outputNumber[10];
+int outputNumber[25];
 int output_index = 0;
+int mostFreq = -1;
 int main(int argc, char** argv)
 {
 MNIST mnist(28, true, true);
 mnist.le("/home/hae/cekeikon5/tiny_dnn/data");
 TimePoint t1=timePoint();
-flann::Index ind(mnist.ax,flann::KDTreeIndexParams(16));
+flann::Index ind(mnist.ax,flann::KDTreeIndexParams(4));
 TimePoint t2=timePoint();
 vector<int> indices(1); vector<float> dists(1);
 
@@ -121,7 +122,7 @@ cascade.load("haar.xml");
 namedWindow("janela");
 setMouseCallback("janela", onMouseGui, &gui.mouse);
 int key = 0;
-int mostFreq = -1;
+
 //namedWindow("mask");
 //namedWindow("inner");
 
@@ -283,12 +284,12 @@ rec.sendString("Keep Alive");
                         Mat cImg = resized_down.reshape(1,1);
                         Mat tmp;    
                         cImg.convertTo(tmp,CV_32FC3);
-                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(512));                        
+                        ind.knnSearch(tmp,indices,dists,1,flann::SearchParams(32));                        
                         
 
                         outputNumber[output_index] = int(mnist.ay(indices[0]));
                         output_index++;
-                        if(output_index == 10){
+                        if(output_index == 25){
                             output_index = 0;
                             int n = sizeof(outputNumber) / sizeof(outputNumber[0]);
                             mostFreq = mostFrequent(outputNumber, n);
@@ -358,7 +359,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
 void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
 {
     if(faces.size() > 0){
-        if (faces[0].width < 100 && faces[0].width > 30){
+        if (faces[0].width < 100 && faces[0].width > 30){ //placa pequena, aproximar
             int Xrect = faces[0].x+faces[0].width/2;
             int Xcenter = 320;
             int epsilon = 70;
@@ -379,11 +380,55 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
             }
         }
-        else {
+        if (faces[0].width <= 30) { //placa provavelmente falsa
             rec.sendString("stop");
         }
+        if (faces[0].width >= 100){ //placa suficientemente grande para reconhecimento correto
+            switch (mostFreq)
+            {
+            case 0:
+                rec.sendString("stop");
+                break;
+            case 1:
+                rec.sendString("stop");
+                break;
+            case 2:
+                std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+                std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+                int duration = std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+                //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count()  << "[µs]" << std::endl;
+                while (duration < 2*1000*1000 ){ // 2 segundos
+                    rec.sendString("b3");
+                }
+                break;
+            case 3:
+                /* code */
+                break;
+            case 4:
+                /* code */
+                break;
+            case 5:
+                /* code */
+                break;
+            case 6:
+                /* code */
+                break;
+            case 7:
+                /* code */
+                break;
+            case 8:
+                /* code */
+                break;
+            case 9:
+                /* code */
+                break;            
+            default: //digito nao reconhecido
+                rec.sendString("stop");
+            }
+
+        }
     }
-    else {
+    else { //nenhuma placa reconhecida
             rec.sendString("stop");
     }
 }
@@ -403,7 +448,7 @@ void sendCommand(Receiver& rec, Mygui& gui)
         }
         
         if(gui.b3.getState()){
-            rec.sendString("b3");        
+            rec.sendString("b3");       
         }
         if(gui.b4.getState()){
             rec.sendString("b4");        

@@ -84,6 +84,7 @@ int mostFrequent(int* arr, int n)
 int outputNumber[25];
 int output_index = 0;
 int mostFreq = -1;
+vector<unsigned char> compressed;
 int main(int argc, char** argv)
 {
 MNIST mnist(28, true, true);
@@ -108,7 +109,7 @@ Receiver rec(argc, argv);
 
 Mat img = Mat::zeros(480 , 640, CV_8UC3);
 std::vector<Rect> faces;
-vector<unsigned char> compressed;
+
 
 //mats
 Mat concatImg = Mat::zeros(480, 640+240, CV_8UC3);
@@ -299,7 +300,7 @@ cv::putText(guiAuto, //target image
                             }
 
                             int startX=corners[1].x,startY=corners[1].y,width=corners[2].x-corners[1].x,height=corners[3].y-corners[1].y;
-                            std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
+                            //std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
                             Mat ROI(eroded, Rect(startX,startY,width,height));
 
 
@@ -359,7 +360,7 @@ cv::putText(guiAuto, //target image
                     hconcat(img,concatImgZ,concatImg);
                     hconcat(gui.a,concatImg,concatImgF);
                     imshow("janela",concatImgF);
-                    rec.sendString("Keep Alive");                 
+                    rec.sendString("stop");                 
                 }                
             }
 
@@ -423,11 +424,11 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
 void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
 {
     if(faces.size() > 0){
-        if (faces[0].width < 100 && faces[0].width > 30){ //placa pequena, aproximar
+        if (faces[0].width < 100 && faces[0].width > 30){
             int Xrect = faces[0].x+faces[0].width/2;
             int Xcenter = 320;
             int epsilon = 70;
-            std::cout << "Tamanho "<< faces[0].width << std::endl;
+            //std::cout << "Tamanho "<< faces[0].width << std::endl;
             if (abs(Xcenter - Xrect) <= epsilon){ // está ao centro
                 //std::cout << "Centro "<< Xrect << std::endl;
                 rec.sendString("b2");
@@ -444,23 +445,28 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
             }
         }
-        if (faces[0].width <= 30) { //placa provavelmente falsa
+        if (faces[0].width < 100){
             rec.sendString("stop");
         }
         if (faces[0].width >= 100){ //placa suficientemente grande para reconhecimento correto
             std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
             std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now();
             int duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
+            std::cout << "digito: " << mostFreq << std::endl;
+            rec.sendString("stop");
+            
             switch (mostFreq)
             {
-            case 0: // Pare o carrinho.
+            case 0: // Pare o carrinho.                
+                std::cout << "digito 0" << std::endl;
                 rec.sendString("stop");
                 break;
             case 1: // Pare o carrinho.
+                std::cout << "digito 1" << std::endl;
                 rec.sendString("stop");
                 break;
             case 2: //Vire 180 graus à esquerda imediatamente.
-                //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
+                std::cout << "digito 2" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
                     endL = std::chrono::steady_clock::now();
@@ -473,6 +479,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;
             case 3: //Vire 180 graus à direita imediatamente.
+                std::cout << "digito 3" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
@@ -486,6 +493,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;
             case 4: //Passe por baixo da placa e continue em frente.
+                std::cout << "digito 4" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
@@ -499,6 +507,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;
             case 5: //Passe por baixo da placa e continue em frente.
+                std::cout << "digito 5" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
@@ -512,6 +521,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;
             case 6: //Vire 90 graus à esquerda imediatamente.
+                std::cout << "digito 6" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
@@ -525,6 +535,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;
             case 7: //Vire 90 graus à esquerda imediatamente.
+                std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
@@ -538,19 +549,18 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;
             case 8: //Vire 90 graus à direita imediatamente.
+                std::cout << "digito 8" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 1*1000*1000 ){ // 2 segundos
+                rec.sendString("b8");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 9: //Vire 90 graus à direita imediatamente.
+                std::cout << "digito 9" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 while (duration < 0100000 ){ // 0.1 segundos
                     rec.sendString("stop");
@@ -564,13 +574,12 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
                 break;            
             default: //digito nao reconhecido
+                std::cout << "digito nao reconhecido" << std::endl;
                 rec.sendString("stop");
             }
+            
 
         }
-    }
-    else { //nenhuma placa reconhecida
-            rec.sendString("stop");
     }
 }
 

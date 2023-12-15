@@ -426,7 +426,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
 void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
 {
     if(faces.size() > 0){
-        if (faces[0].width < 100 && faces[0].width > 30){
+        if (faces[0].width < 80 && faces[0].width > 20){
             int Xrect = faces[0].x+faces[0].width/2;
             int Xcenter = 320;
             int epsilon = 70;
@@ -447,10 +447,10 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
             }
         }
-        if (faces[0].width < 30){
+        if (faces[0].width <= 20){
             rec.sendString("stop");
         }
-        if (faces[0].width >= 100){ //placa suficientemente grande para reconhecimento correto
+        if (faces[0].width >= 80){ //placa suficientemente grande para reconhecimento correto
             std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
             std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now();
             int duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();

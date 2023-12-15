@@ -32,8 +32,10 @@ int main(int argc, char** argv)
     Mat img;
     img = Mat::zeros(480 , 640, CV_8UC3);
     vector<unsigned char> vb;
-    vector<int> param{CV_IMWRITE_JPEG_QUALITY,80};    
-    
+    vector<int> param{CV_IMWRITE_JPEG_QUALITY,100};
+    std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now(); 
+    int durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();    
     while(1){        
         try{
             cap >> img;
@@ -43,9 +45,22 @@ int main(int argc, char** argv)
             
             string command;
             int bytesCommand = rec.recvString(command);
-            if(command.size() > 1){                
-                //std::cout << command << std::endl;
-                motor.execute(command, motor);
+            bool did = false;
+            if(command.size() > 1){                                
+                if(!did){
+                    did = true;
+                    motor.execute(command, motor);
+                    beginL = std::chrono::steady_clock::now();
+                    endL = std::chrono::steady_clock::now();
+                }
+                else{                    
+                    durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                    if (durationL > 100 ){
+                        did = false;                        
+                    }
+                    motor.stop();
+                    endL = std::chrono::steady_clock::now();
+                }                
             }            
         }
         catch(cv::Exception ex){

@@ -181,7 +181,7 @@ void motorH::execute(string& command, motorH& motor)
     }
     else{        
         stop();
-        if (getDurationL > 200){
+        if (getDurationL() > 200){
             did = false;
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();

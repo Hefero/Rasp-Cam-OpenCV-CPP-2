@@ -35,7 +35,8 @@ int main(int argc, char** argv)
     vector<int> param{CV_IMWRITE_JPEG_QUALITY,100};
     std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
     std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now(); 
-    int durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();    
+    int durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+    bool did = false;
     while(1){        
         try{
             cap >> img;
@@ -44,8 +45,7 @@ int main(int argc, char** argv)
             int bytesRec;
             
             string command;
-            int bytesCommand = rec.recvString(command);
-            bool did = false;
+            int bytesCommand = rec.recvString(command);            
             if(command.size() > 1){                                
                 if(!did){
                     did = true;

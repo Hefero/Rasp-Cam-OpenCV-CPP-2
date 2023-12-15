@@ -29,5 +29,10 @@ class motorH
         void execute(string& command, motorH& motor);
         void debug();
         bool moving = false;
+        std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
+        std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now(); 
+        int getDurationL() { return std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count()};
+        bool did = false;
+
 };
 #endif

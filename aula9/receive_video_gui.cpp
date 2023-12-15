@@ -386,6 +386,8 @@ cv::putText(guiAuto, //target image
     }
     catch(cv::Exception ex){
             continue;
+            rec.sendString("alive");
+            rec.recvBytes(compressed);
     }
     if (key = cv::waitKey(1) >= 0) break;
  }
@@ -445,7 +447,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }
             }
         }
-        if (faces[0].width < 100){
+        if (faces[0].width < 30){
             rec.sendString("stop");
         }
         if (faces[0].width >= 100){ //placa suficientemente grande para reconhecimento correto
@@ -467,86 +469,67 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 break;
             case 2: //Vire 180 graus à esquerda imediatamente.
                 std::cout << "digito 2" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 2*1000*1000 ){ // 2 segundos
+                rec.sendString("b3");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 3: //Vire 180 graus à direita imediatamente.
                 std::cout << "digito 3" << std::endl;
-                //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 2*1000*1000 ){ // 2 segundos
+                rec.sendString("b8");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 4: //Passe por baixo da placa e continue em frente.
                 std::cout << "digito 4" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 2*1000*1000 ){ // 2 segundos
+                rec.sendString("b2");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b2");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 5: //Passe por baixo da placa e continue em frente.
                 std::cout << "digito 5" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 2*1000*1000 ){ // 2 segundos
+                rec.sendString("b2");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b2");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 6: //Vire 90 graus à esquerda imediatamente.
                 std::cout << "digito 6" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 1*1000*1000 ){ // 2 segundos
+                rec.sendString("b3");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 7: //Vire 90 graus à esquerda imediatamente.
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 1*1000*1000 ){ // 2 segundos
+                rec.sendString("b3");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
                 break;
             case 8: //Vire 90 graus à direita imediatamente.
                 std::cout << "digito 8" << std::endl;
@@ -560,25 +543,20 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 }                
                 break;
             case 9: //Vire 90 graus à direita imediatamente.
-                std::cout << "digito 9" << std::endl;
+               std::cout << "digito 9" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                while (duration < 0100000 ){ // 0.1 segundos
-                    rec.sendString("stop");
-                    endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                while (duration < 1*1000*1000 ){ // 2 segundos
+                rec.sendString("b8");
+                while (duration < 1000 ){ // 2 segundos
+                    rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();
-                    duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
-                }
-                break;            
+                    duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
+                }                
+                break;          
             default: //digito nao reconhecido
                 std::cout << "digito nao reconhecido" << std::endl;
                 rec.sendString("stop");
             }
-            
-
         }
     }
 }

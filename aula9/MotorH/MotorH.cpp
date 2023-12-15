@@ -10,7 +10,7 @@
 #include "MotorH.h"
 
 
-#define velDir 100
+#define velDir 80
 #define velEsq 100
 #define LEFT_TURN_DISTANCE 1
 #define RIGHT_TURN_DISTANCE 1
@@ -180,7 +180,7 @@ void motorH::execute(string& command, motorH& motor)
         }
     }
     else{        
-        stop();
+        hardStop();
         if (getDurationL() > delayTime*2){
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();

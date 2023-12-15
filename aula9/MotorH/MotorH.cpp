@@ -77,38 +77,12 @@ void motorH::motorDir(int command, int duty)
         softPwmWrite(23, 0);
         break;
     case 1: // move forward
-        if(!did){
-            did = true;
-            softPwmWrite(22, duty);
-            beginL = std::chrono::steady_clock::now();
-            endL = std::chrono::steady_clock::now();
-        }
-        else {            
-            if (getDurationL() > 100 ){
-                did = false;                        
-            }
-            softPwmWrite(22, 0);
-            endL = std::chrono::steady_clock::now();
-
-        }
+        softPwmWrite(22, duty);
         softPwmWrite(23, 0);
         break;
     case -1: // move backwards
         softPwmWrite(22, 0);
-       if(!did){
-            did = true;
-            softPwmWrite(23, duty);
-            beginL = std::chrono::steady_clock::now();
-            endL = std::chrono::steady_clock::now();
-        }
-        else {            
-            if (getDurationL() > 100 ){
-                did = false;                        
-            }
-            softPwmWrite(23, 0);
-            endL = std::chrono::steady_clock::now();
-
-        }
+        softPwmWrite(23, duty);
         break;
     case 2: // hard break
         softPwmWrite(22, 100);
@@ -127,36 +101,10 @@ void motorH::motorEsq(int command, int duty)
         break;
     case 1: // move forward
         softPwmWrite(24, 0);
-        if(!did){
-            did = true;
-            softPwmWrite(25, duty);
-            beginL = std::chrono::steady_clock::now();
-            endL = std::chrono::steady_clock::now();
-        }
-        else {            
-            if (getDurationL() > 100 ){
-                did = false;                        
-            }
-            softPwmWrite(25, 0);
-            endL = std::chrono::steady_clock::now();
-
-        }
+        softPwmWrite(25, duty);
         break;
     case -1: // move backwards
-        if(!did){
-            did = true;
-            softPwmWrite(24, duty);
-            beginL = std::chrono::steady_clock::now();
-            endL = std::chrono::steady_clock::now();
-        }
-        else {            
-            if (getDurationL() > 100 ){
-                did = false;                        
-            }
-            softPwmWrite(24, 0);
-            endL = std::chrono::steady_clock::now();
-
-        }
+        softPwmWrite(24, duty);
         softPwmWrite(25, 0);
         break;
     case 2: // hard break

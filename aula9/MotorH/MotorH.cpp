@@ -83,9 +83,8 @@ void motorH::motorDir(int command, int duty)
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
         }
-        else {
-            durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
-            if (durationL > 100 ){
+        else {            
+            if (getDurationL() > 100 ){
                 did = false;                        
             }
             softPwmWrite(22, 0);
@@ -102,9 +101,8 @@ void motorH::motorDir(int command, int duty)
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
         }
-        else {
-            durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
-            if (durationL > 100 ){
+        else {            
+            if (getDurationL() > 100 ){
                 did = false;                        
             }
             softPwmWrite(23, 0);
@@ -135,9 +133,8 @@ void motorH::motorEsq(int command, int duty)
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
         }
-        else {
-            durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
-            if (durationL > 100 ){
+        else {            
+            if (getDurationL() > 100 ){
                 did = false;                        
             }
             softPwmWrite(25, 0);
@@ -152,9 +149,8 @@ void motorH::motorEsq(int command, int duty)
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
         }
-        else {
-            durationL = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
-            if (durationL > 100 ){
+        else {            
+            if (getDurationL() > 100 ){
                 did = false;                        
             }
             softPwmWrite(24, 0);

@@ -120,75 +120,75 @@ void motorH::execute(string& command, motorH& motor)
     if (strcmp(command.data(),lastCommand.data()) != 0){
         lastCommand = command;
         beginL = std::chrono::steady_clock::now();
-    }
-    if (getDurationL() <= delayTime){        
-        endL = std::chrono::steady_clock::now();
-        if(command.size() > 1){            
-            char stop[4096] = "stop";    
-            if( strcmp(command.data(),stop) == 0){            
-                std::cout << command << std::endl;
-                motorH::stop();
+    
+        if (getDurationL() <= delayTime){        
+            endL = std::chrono::steady_clock::now();
+            if(command.size() > 1){            
+                char stop[4096] = "stop";    
+                if( strcmp(command.data(),stop) == 0){            
+                    std::cout << command << std::endl;
+                    motorH::stop();
+                }
+                char b1[4096] = "b1";    
+                if( strcmp(command.data(),b1) == 0 ){
+                    motorDir(1, velDir);
+                    motorEsq(1, velEsq/2);
+                    std::cout << command << std::endl;
+                }
+                char b2[4096] = "b2";
+                if( strcmp(command.data(),b2) == 0 ){
+                    moveForward();
+                    std::cout << command << std::endl;
+                }
+                char b3[4096] = "b3";    
+                if( strcmp(command.data(),b3) == 0 ){
+                    turnLeft();
+                    std::cout << command << std::endl;
+                }
+                char b4[4096] = "b4";    
+                if( strcmp(command.data(),b4) == 0 ){
+                    hardStop();
+                    std::cout << command << std::endl;
+                }
+                char b5[4096] = "b5";    
+                if( strcmp(command.data(),b5) == 0 ){
+                    motorDir(-1, velDir);
+                    motorEsq(-1,velEsq/2);
+                }
+                char b6[4096] = "b6";    
+                if( strcmp(command.data(),b6) == 0 ){
+                    moveBackwards();
+                    std::cout << command << std::endl;
+                }
+                char b7[4096] = "b7";    
+                if( strcmp(command.data(),b7) == 0 ){
+                    motorDir(1, velDir/2);
+                    motorEsq(1, velEsq);            
+                    std::cout << command << std::endl;
+                }
+                char b8[4096] = "b8";    
+                if( strcmp(command.data(),b8) == 0 ){
+                    turnRight();
+                    std::cout << command << std::endl;
+                }
+                char b9[4096] = "b9";    
+                if( strcmp(command.data(),b9) == 0 ){
+                    motorDir(-1, velDir/2);
+                    motorEsq(-1, velEsq); 
+                    std::cout << command << std::endl;
+                }
+            }    
+        }
+        else{        
+            hardStop();
+            if (getDurationL() > delayTime*2){
+                beginL = std::chrono::steady_clock::now();
+                endL = std::chrono::steady_clock::now();                
             }
-            char b1[4096] = "b1";    
-            if( strcmp(command.data(),b1) == 0 ){
-                motorDir(1, velDir);
-                motorEsq(1, velEsq/2);
-                std::cout << command << std::endl;
-            }
-            char b2[4096] = "b2";
-            if( strcmp(command.data(),b2) == 0 ){
-                moveForward();
-                std::cout << command << std::endl;
-            }
-            char b3[4096] = "b3";    
-            if( strcmp(command.data(),b3) == 0 ){
-                turnLeft();
-                std::cout << command << std::endl;
-            }
-            char b4[4096] = "b4";    
-            if( strcmp(command.data(),b4) == 0 ){
-                hardStop();
-                std::cout << command << std::endl;
-            }
-            char b5[4096] = "b5";    
-            if( strcmp(command.data(),b5) == 0 ){
-                motorDir(-1, velDir);
-                motorEsq(-1,velEsq/2);
-            }
-            char b6[4096] = "b6";    
-            if( strcmp(command.data(),b6) == 0 ){
-                moveBackwards();
-                std::cout << command << std::endl;
-            }
-            char b7[4096] = "b7";    
-            if( strcmp(command.data(),b7) == 0 ){
-                motorDir(1, velDir/2);
-                motorEsq(1, velEsq);            
-                std::cout << command << std::endl;
-            }
-            char b8[4096] = "b8";    
-            if( strcmp(command.data(),b8) == 0 ){
-                turnRight();
-                std::cout << command << std::endl;
-            }
-            char b9[4096] = "b9";    
-            if( strcmp(command.data(),b9) == 0 ){
-                motorDir(-1, velDir/2);
-                motorEsq(-1, velEsq); 
-                std::cout << command << std::endl;
+            else{
+                endL = std::chrono::steady_clock::now();
             }
         }
-    }
-    else{        
-        hardStop();
-        if (getDurationL() > delayTime*2){
-            beginL = std::chrono::steady_clock::now();
-            endL = std::chrono::steady_clock::now();
-            
-        }
-        else{
-            endL = std::chrono::steady_clock::now();
-        }        
     }
 }
 

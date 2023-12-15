@@ -10,8 +10,8 @@
 #include "MotorH.h"
 
 
-#define velDir 60
-#define velEsq 100
+#define velDir 100
+#define velEsq 60
 #define LEFT_TURN_DISTANCE 1
 #define RIGHT_TURN_DISTANCE 1
 
@@ -116,7 +116,7 @@ void motorH::motorEsq(int command, int duty)
 
 void motorH::execute(string& command, motorH& motor)
 {
-    int delayTime = 50;
+    int delayTime = 40;
     if (strcmp(command.data(),lastCommand.data()) != 0){
         lastCommand = command;
         beginL = std::chrono::steady_clock::now();

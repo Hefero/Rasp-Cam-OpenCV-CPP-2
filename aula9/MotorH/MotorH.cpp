@@ -116,8 +116,12 @@ void motorH::motorEsq(int command, int duty)
 
 void motorH::execute(string& command, motorH& motor)
 {
-    if (strcmp(command.data(),lastCommand.data()) != 0){        
-    
+    if (strcmp(command.data(),lastCommand.data()) != 0){
+        lastCommand = command;
+        beginL = std::chrono::steady_clock::now();
+    }
+    if (!did){
+        did = true;
         if(command.size() > 1){
             //std::cout << "receive command " << command << std::endl;        
             char stop[4096] = "stop";    
@@ -173,9 +177,18 @@ void motorH::execute(string& command, motorH& motor)
                 motorEsq(-1, velEsq); 
                 std::cout << command << std::endl;
             }
-
         }
-        lastCommand = command;
+    }
+    else{        
+        stop();
+        if (getDurationL > 200){
+            did = false;
+            beginL = std::chrono::steady_clock::now();
+            endL = std::chrono::steady_clock::now();
+        }
+        else{
+            endL = std::chrono::steady_clock::now();
+        }        
     }
 }
 

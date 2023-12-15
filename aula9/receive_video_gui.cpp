@@ -352,7 +352,7 @@ cv::putText(guiAuto, //target image
                     catch(exception ex){
 
                     }
-                    sendFollow(rec, img, faces);                    
+                    sendFollow(rec, img, faces);                               
                 }
                 else {
                     output_index = 0;
@@ -360,7 +360,7 @@ cv::putText(guiAuto, //target image
                     hconcat(img,concatImgZ,concatImg);
                     hconcat(gui.a,concatImg,concatImgF);
                     imshow("janela",concatImgF);
-                    rec.sendString("stop");                 
+                    rec.sendString("stop");                    
                 }                
             }
 
@@ -401,7 +401,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(600,600);
-    cascade.detectMultiScale( frame_gray, faces, 1.1, 3, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.05, 3, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );

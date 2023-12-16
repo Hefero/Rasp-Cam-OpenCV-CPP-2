@@ -10,8 +10,8 @@
 #include "MotorH.h"
 
 
-#define velDir 65
-#define velEsq 80
+#define velDir 60
+#define velEsq 70
 #define LEFT_TURN_DISTANCE 1
 #define RIGHT_TURN_DISTANCE 1
 
@@ -57,7 +57,7 @@ void motorH::hardStop(void)
 void motorH::turnLeft(void)
 {
     moving = true;
-    motorDir(1, velDir);
+    motorDir(1, velDir/2);
     motorEsq(0, velEsq);
 }
 
@@ -65,7 +65,7 @@ void motorH::turnRight(void)
 {
     moving = true;
     motorDir(0, velDir);
-    motorEsq(1, velEsq);
+    motorEsq(1, velEsq/2);
 }   
 
 void motorH::motorDir(int command, int duty)

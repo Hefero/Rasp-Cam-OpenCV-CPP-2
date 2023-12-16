@@ -225,20 +225,20 @@ cv::putText(guiAuto, //target image
                         Mat imageContrastHigh;                    
                         for (int i = 0; i <10; i++){
                             //contrast
-                            eroded.convertTo(imageContrastHigh, -1, 1.5, 0.1);
+                            gray.convertTo(imageContrastHigh, -1, 1.5, 0.1);
                             //gammacorrection
-                            gammaCorrection(imageContrastHigh, eroded, 0.6);                    
+                            gammaCorrection(imageContrastHigh, gray, 0.6);                    
                         }
 
                         //findcountours
                         //Mat resize_upE;
-                        //resize(eroded, resize_upE, ImgSize.size(), INTER_LINEAR);
+                        //resize(gray, resize_upE, ImgSize.size(), INTER_LINEAR);
                         //imshow("cropped",resize_upE);
                         
-                        cv::threshold(eroded, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
+                        cv::threshold(gray, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
                         Mat resize_upM;
                         try {
-                            resize(eroded, resize_upM, ImgSize.size(), INTER_LINEAR);                    
+                            resize(gray, resize_upM, ImgSize.size(), INTER_LINEAR);                    
                         }
                         catch (exception ex){
 
@@ -310,7 +310,7 @@ cv::putText(guiAuto, //target image
 
                             int startX=corners[1].x,startY=corners[1].y,width=corners[2].x-corners[1].x,height=corners[3].y-corners[1].y;
                             //std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
-                            Mat ROI(eroded, Rect(startX,startY,width,height));        
+                            Mat ROI(gray, Rect(startX,startY,width,height));        
                             
                             ROI.copyTo(croppedImage);
                             //croppedImage.copyTo(img);
@@ -405,7 +405,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(480,480);
-    cascade.detectMultiScale( frame_gray, faces, 1.05, 5, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.03, 5, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -474,7 +474,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             case 2: //Vire 180 graus à esquerda imediatamente.
                 std::cout << "digito 2" << std::endl;
                 rec.sendString("b3");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 8000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
@@ -484,7 +484,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             case 3: //Vire 180 graus à direita imediatamente.
                 std::cout << "digito 3" << std::endl;
                 rec.sendString("b8");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 8000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();
@@ -517,7 +517,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 6" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b3");
-                while (duration < 8000 ){ // 2 segundos
+                while (duration < 3000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
@@ -528,7 +528,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b4");
-                while (duration < 2000 ){ // 2 segundos
+                while (duration < 3000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();
@@ -539,7 +539,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 8" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b9");
-                while (duration < 3000 ){ // 2 segundos
+                while (duration < 4000 ){ // 2 segundos
                     //rec.recvBytes(compressed);
                     //rec.sendString("stop");
                     rec.recvBytes(compressed);
@@ -552,7 +552,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                std::cout << "digito 9" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b8");
-                while (duration < 10000 ){ // 2 segundos
+                while (duration < 4000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();

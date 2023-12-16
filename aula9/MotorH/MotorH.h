@@ -21,6 +21,7 @@ class motorH
         void motorDir(int command, int duty);
         void motorEsq(int command, int duty);
         void moveForward();
+        void moveForwardFull();
         void moveBackwards();
         void turnLeft();
         void turnRight();

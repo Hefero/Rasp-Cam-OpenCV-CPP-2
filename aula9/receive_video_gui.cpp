@@ -86,6 +86,7 @@ int output_index = 0;
 int mostFreq = -1;
 vector<unsigned char> compressed;
 Mat img = Mat::zeros(480 , 640, CV_8UC3);
+Mat croppedImage;          // Copy the data into new matrix
 int main(int argc, char** argv)
 {
 MNIST mnist(28, true, true);
@@ -127,6 +128,8 @@ Mat resize_up = Mat::zeros(240, 240, CV_8UC3);
 Mat resized_down = Mat::zeros(28, 28, CV_8UC3);
 cv::Mat mask;
 Mat eroded;
+
+
 
 cascade.load("haar.xml");
 
@@ -308,7 +311,7 @@ cv::putText(guiAuto, //target image
                             int startX=corners[1].x,startY=corners[1].y,width=corners[2].x-corners[1].x,height=corners[3].y-corners[1].y;
                             //std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
                             Mat ROI(eroded, Rect(startX,startY,width,height));        
-                            Mat croppedImage;          // Copy the data into new matrix
+                            
                             ROI.copyTo(croppedImage);
                             //croppedImage.copyTo(img);
                             int down_width = 28;
@@ -402,7 +405,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(480,480);
-    cascade.detectMultiScale( frame_gray, faces, 1.01, 10, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.1, 3, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -431,7 +434,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             int Xrect = faces[0].x+faces[0].width/2;
             int Xcenter = 320;
             int epsilon = 70;
-            //std::cout << "Tamanho "<< faces[0].width << std::endl;
+            std::cout << "Tamanho "<< croppedImage.size() << std::endl;
             if (abs(Xcenter - Xrect) <= epsilon){ // está ao centro
                 //std::cout << "Centro "<< Xrect << std::endl;
                 rec.sendString("b2");
@@ -524,10 +527,10 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             case 7: //Vire 90 graus à esquerda imediatamente.
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                rec.sendString("b3");
+                rec.sendString("b4");
                 while (duration < 8000 ){ // 2 segundos
                     rec.recvBytes(compressed);
-                    rec.sendString("b3");
+                    rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
                 }                
@@ -535,12 +538,12 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             case 8: //Vire 90 graus à direita imediatamente.
                 std::cout << "digito 8" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                rec.sendString("b8");
+                rec.sendString("b9");
                 while (duration < 10000 ){ // 2 segundos
                     //rec.recvBytes(compressed);
                     //rec.sendString("stop");
                     rec.recvBytes(compressed);
-                    rec.sendString("b8");
+                    rec.sendString("b9");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
                 }                

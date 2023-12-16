@@ -166,8 +166,15 @@ void motorH::execute(string& command, motorH& motor)
             }
             char b4[4096] = "b4";    
             if( strcmp(command.data(),b4) == 0 ){
-                hardStop();
                 std::cout << command << std::endl;
+                if (moving){
+                    motorDir(1, 50);
+                    motorEsq(0, 0);
+                }
+                if (!moving){
+                    stop();
+                }
+                moving = !moving;
             }
             char b5[4096] = "b5";    
             if( strcmp(command.data(),b5) == 0 ){
@@ -192,10 +199,16 @@ void motorH::execute(string& command, motorH& motor)
             }
             char b9[4096] = "b9";    
             if( strcmp(command.data(),b9) == 0 ){
-                motorDir(-1, velDir/2);
-                motorEsq(-1, velEsq); 
                 std::cout << command << std::endl;
-            }
+                if (moving){
+                    motorDir(0, 0);
+                    motorEsq(1, 100);
+                }
+                if (!moving){
+                    stop();
+                }
+                moving = !moving;
+                        }
         }
     }
     else{        

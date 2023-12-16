@@ -400,7 +400,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     equalizeHist( frame_gray, frame_gray );
     //-- Detect faces    
     Size minSize=Size(14,14);
-    Size maxSize=Size(400,400);
+    Size maxSize=Size(480,480);
     cascade.detectMultiScale( frame_gray, faces, 1.05, 3, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {

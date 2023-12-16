@@ -11,7 +11,7 @@
 
 
 #define velDir 65
-#define velEsq 70
+#define velEsq 80
 #define LEFT_TURN_DISTANCE 1
 #define RIGHT_TURN_DISTANCE 1
 

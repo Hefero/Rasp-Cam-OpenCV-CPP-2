@@ -57,7 +57,7 @@ void motorH::hardStop(void)
 void motorH::turnLeft(void)
 {
     moving = true;
-    motorDir(1, velDir/2);
+    motorDir(1, velDir);
     motorEsq(0, velEsq);
 }
 
@@ -65,7 +65,7 @@ void motorH::turnRight(void)
 {
     moving = true;
     motorDir(0, velDir);
-    motorEsq(1, velEsq/2);
+    motorEsq(1, velEsq);
 }   
 
 void motorH::motorDir(int command, int duty)

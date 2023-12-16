@@ -79,7 +79,7 @@ void motorH::turnRight(void)
 {
     if (moving){
         motorDir(0, velDir);
-        motorEsq(1, 50);
+        motorEsq(1, 60);
     }
     if (!moving){
         stop();
@@ -135,7 +135,7 @@ void motorH::motorEsq(int command, int duty)
 
 void motorH::execute(string& command, motorH& motor)
 {
-    int delayTime = 10;
+    int delayTime = 20;
     if (strcmp(command.data(),lastCommand.data()) != 0){
         lastCommand = command;
         beginL = std::chrono::steady_clock::now();
@@ -200,7 +200,7 @@ void motorH::execute(string& command, motorH& motor)
     }
     else{        
         stop();
-        if (getDurationL() > delayTime*5){
+        if (getDurationL() > delayTime*3){
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
             

@@ -492,7 +492,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 4" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b2");
-                while (duration < 1500 ){ // 2 segundos
+                while (duration < 10000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b2");
                     endL = std::chrono::steady_clock::now();
@@ -503,7 +503,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 5" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b2");
-                while (duration < 1500 ){ // 2 segundos
+                while (duration < 10000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b2");
                     endL = std::chrono::steady_clock::now();
@@ -514,7 +514,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 6" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b3");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 8000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
@@ -525,7 +525,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b3");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 8000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b3");
                     endL = std::chrono::steady_clock::now();
@@ -549,7 +549,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                std::cout << "digito 9" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b8");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 10000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();

@@ -36,14 +36,14 @@ void motorH::stop(void)
 
 void motorH::moveForward()
 {
-    if (moving){        
+    if (moving){    
         motorDir(1, velDir); 
         motorEsq(1, velEsq);
     }
-    else{
+    if (!moving){
         stop();
     }
-    !moving;
+    moving = !moving;
 }
 void motorH::moveBackwards()
 {
@@ -51,10 +51,10 @@ void motorH::moveBackwards()
         motorDir(-1, velDir); 
         motorEsq(-1, velEsq);
     }
-    else{
+    if (!moving){
         stop();
     }
-    !moving;
+    moving = !moving;
 }
 
 void motorH::hardStop(void)
@@ -69,10 +69,10 @@ void motorH::turnLeft(void)
         motorDir(1, 60);
         motorEsq(0, velEsq);
     }
-    else{
+    if (!moving){
         stop();
     }
-    !moving;
+    moving = !moving;
 }
 
 void motorH::turnRight(void)
@@ -81,10 +81,10 @@ void motorH::turnRight(void)
         motorDir(0, velDir);
         motorEsq(1, 60);
     }
-    else{
+    if (!moving){
         stop();
     }
-    !moving;
+    moving = !moving;
 }   
 
 void motorH::motorDir(int command, int duty)

@@ -181,7 +181,7 @@ void motorH::execute(string& command, motorH& motor)
     }
     else{        
         hardStop();
-        if (getDurationL() > delayTime*4){
+        if (getDurationL() > delayTime*10){
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
             

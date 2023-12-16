@@ -399,7 +399,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
     equalizeHist( frame_gray, frame_gray );
     //-- Detect faces    
-    Size minSize=Size(14,14);
+    Size minSize=Size(20,20);
     Size maxSize=Size(600,600);
     cascade.detectMultiScale( frame_gray, faces, 1.01, 10, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )

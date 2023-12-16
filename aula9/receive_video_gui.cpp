@@ -440,11 +440,11 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 if (Xrect >= (Xcenter + epsilon)){ // está a direita
                 //std::cout << "Direita " << Xrect << std::endl;
                 
-                rec.sendString("b7");
+                rec.sendString("b8");
                 }
                 if (Xrect <= (Xcenter - epsilon)){ // está a esquerda
                 //std::cout << "Esquerda " << Xrect << std::endl;
-                rec.sendString("b1");
+                rec.sendString("b3");
                 }
             }
         }

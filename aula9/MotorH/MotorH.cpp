@@ -28,44 +28,62 @@ motorH::motorH()
 
 void motorH::moveForward()
 {
-    moving = true;
-    motorDir(1, velDir); 
-    motorEsq(1, velEsq);
+    if (moving){        
+        motorDir(1, velDir); 
+        motorEsq(1, velEsq);
+    }
+    else{
+        stop();
+    }
+    !moving;
 }
 void motorH::moveBackwards()
 {
-    moving = true;
-    motorDir(-1, velDir); 
-    motorEsq(-1, velEsq);
+    if (moving){
+        motorDir(-1, velDir); 
+        motorEsq(-1, velEsq);
+    }
+    else{
+        stop();
+    }
+    !moving;
 }
 
 void motorH::stop(void)
-{
-    moving = false;
+{    
     motorDir(0, 0); // inicia os motores em ponto morto
     motorEsq(0, 0); // inicia os motores em ponto morto
    
 }
 
 void motorH::hardStop(void)
-{
-    moving = false;
+{    
     motorDir(2, 0); // trava os motores
     motorEsq(2, 0); // trava os motores    
 }
 
 void motorH::turnLeft(void)
 {
-    moving = true;
-    motorDir(1, 60);
-    motorEsq(0, velEsq);
+    if (moving){
+        motorDir(1, 60);
+        motorEsq(0, velEsq);
+    }
+    else{
+        stop();
+    }
+    !moving;
 }
 
 void motorH::turnRight(void)
 {
-    moving = true;
-    motorDir(0, velDir);
-    motorEsq(1, 60);
+    if (moving){
+        motorDir(0, velDir);
+        motorEsq(1, 60);
+    }
+    else{
+        stop();
+    }
+    !moving;
 }   
 
 void motorH::motorDir(int command, int duty)
@@ -121,7 +139,7 @@ void motorH::execute(string& command, motorH& motor)
         lastCommand = command;
         beginL = std::chrono::steady_clock::now();
     }
-    if (getDurationL() <= delayTime){        
+    if (getDurationL() <= delayTime)
         endL = std::chrono::steady_clock::now();
         if(command.size() > 1){            
             char stop[4096] = "stop";    

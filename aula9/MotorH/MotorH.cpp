@@ -26,6 +26,14 @@ motorH::motorH()
    softPwmCreate(25, 0, 100);   
 }
 
+
+void motorH::stop(void)
+{    
+    motorDir(0, 0); // inicia os motores em ponto morto
+    motorEsq(0, 0); // inicia os motores em ponto morto
+   
+}
+
 void motorH::moveForward()
 {
     if (moving){        
@@ -47,13 +55,6 @@ void motorH::moveBackwards()
         stop();
     }
     !moving;
-}
-
-void motorH::stop(void)
-{    
-    motorDir(0, 0); // inicia os motores em ponto morto
-    motorEsq(0, 0); // inicia os motores em ponto morto
-   
 }
 
 void motorH::hardStop(void)

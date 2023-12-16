@@ -172,7 +172,7 @@ void motorH::execute(string& command, motorH& motor)
                     motorEsq(0, 0);
                 }
                 if (!moving){
-                    stop();
+                    motorH::stop();
                 }
                 moving = !moving;
             }
@@ -205,10 +205,10 @@ void motorH::execute(string& command, motorH& motor)
                     motorEsq(1, 100);
                 }
                 if (!moving){
-                    stop();
+                    motorH::stop();
                 }
                 moving = !moving;
-                        }
+            }
         }
     }
     else{        

@@ -57,7 +57,7 @@ void motorH::hardStop(void)
 void motorH::turnLeft(void)
 {
     moving = true;
-    motorDir(1, velDir/3);
+    motorDir(1, velDir/2);
     motorEsq(0, velEsq);
 }
 
@@ -65,7 +65,7 @@ void motorH::turnRight(void)
 {
     moving = true;
     motorDir(0, velDir);
-    motorEsq(1, velEsq/3);
+    motorEsq(1, velEsq/2);
 }   
 
 void motorH::motorDir(int command, int duty)
@@ -181,7 +181,7 @@ void motorH::execute(string& command, motorH& motor)
     }
     else{        
         hardStop();
-        if (getDurationL() > delayTime*10){
+        if (getDurationL() > delayTime*20){
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
             

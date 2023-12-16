@@ -11,7 +11,7 @@
 
 
 #define velDir 80
-#define velEsq 100
+#define velEsq 80
 #define LEFT_TURN_DISTANCE 1
 #define RIGHT_TURN_DISTANCE 1
 
@@ -65,7 +65,7 @@ void motorH::turnRight(void)
 {
     moving = true;
     motorDir(0, velDir);
-    motorEsq(1, velEsq/1.2);
+    motorEsq(1, velEsq/1.5);
 }   
 
 void motorH::motorDir(int command, int duty)

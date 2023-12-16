@@ -65,7 +65,7 @@ void motorH::turnRight(void)
 {
     moving = true;
     motorDir(0, velDir);
-    motorEsq(1, velEsq);
+    motorEsq(1, velEsq/1.2);
 }   
 
 void motorH::motorDir(int command, int duty)

@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     Mat img;
     img = Mat::zeros(480 , 640, CV_8UC3);
     vector<unsigned char> vb;
-    vector<int> param{CV_IMWRITE_JPEG_QUALITY,80};    
+    vector<int> param{CV_IMWRITE_JPEG_QUALITY,100};    
     
     while(1){        
         try{

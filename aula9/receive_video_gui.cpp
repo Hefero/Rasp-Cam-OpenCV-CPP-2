@@ -528,7 +528,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b4");
-                while (duration < 8000 ){ // 2 segundos
+                while (duration < 2000 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();
@@ -539,7 +539,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 8" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b9");
-                while (duration < 10000 ){ // 2 segundos
+                while (duration < 3000 ){ // 2 segundos
                     //rec.recvBytes(compressed);
                     //rec.sendString("stop");
                     rec.recvBytes(compressed);

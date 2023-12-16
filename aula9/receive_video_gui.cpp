@@ -85,6 +85,7 @@ int outputNumber[5];
 int output_index = 0;
 int mostFreq = -1;
 vector<unsigned char> compressed;
+Mat img = Mat::zeros(480 , 640, CV_8UC3);
 int main(int argc, char** argv)
 {
 MNIST mnist(28, true, true);
@@ -107,7 +108,7 @@ outputVideo.open("receive.avi" , ex, vid_capture.get(CV_CAP_PROP_FPS),S, true);
 
 Receiver rec(argc, argv);
 
-Mat img = Mat::zeros(480 , 640, CV_8UC3);
+
 std::vector<Rect> faces;
 
 
@@ -535,8 +536,8 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 8" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b8");
-                while (duration < 5000 ){ // 2 segundos
-                    rec.recvBytes(compressed);
+                while (duration < 10000 ){ // 2 segundos
+                    rec.recvBytes(compressed);                    
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();

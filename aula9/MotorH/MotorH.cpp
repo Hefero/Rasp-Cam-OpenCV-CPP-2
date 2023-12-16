@@ -223,7 +223,7 @@ void motorH::execute(string& command, motorH& motor)
     }
     else{        
         motorH::stop();
-        if (getDurationL() > delayTime*5){
+        if (getDurationL() > delayTime*2){
             beginL = std::chrono::steady_clock::now();
             endL = std::chrono::steady_clock::now();
             

@@ -402,7 +402,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(480,480);
-    cascade.detectMultiScale( frame_gray, faces, 1.05, 3, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.09, 3, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -537,7 +537,9 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b8");
                 while (duration < 10000 ){ // 2 segundos
-                    rec.recvBytes(compressed);                    
+                    rec.recvBytes(compressed);
+                    rec.sendString("stop");
+                    rec.recvBytes(compressed);
                     rec.sendString("b8");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();

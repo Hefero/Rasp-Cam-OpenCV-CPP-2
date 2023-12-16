@@ -124,7 +124,7 @@ Mat resize_upE = Mat::zeros(240, 240, CV_8UC3);
 Mat resize_up = Mat::zeros(240, 240, CV_8UC3);
 
 
-Mat resized_down;
+Mat resized_down = Mat::zeros(28, 28, CV_8UC3);
 cv::Mat mask;
 Mat eroded;
 
@@ -234,7 +234,12 @@ cv::putText(guiAuto, //target image
                         
                         cv::threshold(eroded, mask, 0, 255, CV_THRESH_BINARY_INV | CV_THRESH_OTSU);
                         Mat resize_upM;
-                        resize(eroded, resize_upM, ImgSize.size(), INTER_LINEAR);                    
+                        try {
+                            resize(eroded, resize_upM, ImgSize.size(), INTER_LINEAR);                    
+                        }
+                        catch (exception ex){
+
+                        }
                         //imshow("mask",resize_upM);
 
                         std::vector<std::vector<cv::Point>> contours;
@@ -302,25 +307,20 @@ cv::putText(guiAuto, //target image
 
                             int startX=corners[1].x,startY=corners[1].y,width=corners[2].x-corners[1].x,height=corners[3].y-corners[1].y;
                             //std::cout << "startx: " << minX << " starty: " << minY << " width: " << maxX-minX << " height: " << maxY-minY << std::endl;
-                            Mat ROI(eroded, Rect(startX,startY,width,height));
-
-
-                            
-
+                            Mat ROI(eroded, Rect(startX,startY,width,height));        
                             Mat croppedImage;          // Copy the data into new matrix
-
-
-                            ROI.copyTo(croppedImage);                
-                            
+                            ROI.copyTo(croppedImage);
                             //croppedImage.copyTo(img);
-
                             int down_width = 28;
                             int down_height = 28;                        
                             //resize down
-                            resize(croppedImage, resized_down, Size(down_width, down_height), INTER_LINEAR);
+                            try{
+                                resize(croppedImage, resized_down, Size(down_width, down_height), INTER_LINEAR);                                
+                                resize(croppedImage, resize_up, ImgSize.size(), INTER_LINEAR);
+                            }
+                            catch(exception ex){
 
-                            
-                            resize(croppedImage, resize_up, ImgSize.size(), INTER_LINEAR);
+                            }
 
 
                             

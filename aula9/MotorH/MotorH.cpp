@@ -66,7 +66,7 @@ void motorH::hardStop(void)
 void motorH::turnLeft(void)
 {
     if (moving){
-        motorDir(1, 20);
+        motorDir(1, 0);
         motorEsq(0, 0);
     }
     if (!moving){
@@ -79,7 +79,7 @@ void motorH::turnRight(void)
 {
     if (moving){
         motorDir(0, 0);
-        motorEsq(1, 70);
+        motorEsq(1, 0);
     }
     if (!moving){
         stop();

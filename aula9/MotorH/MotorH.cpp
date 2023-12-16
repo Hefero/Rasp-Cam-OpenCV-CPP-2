@@ -140,7 +140,7 @@ void motorH::execute(string& command, motorH& motor)
         lastCommand = command;
         beginL = std::chrono::steady_clock::now();
     }
-    if (getDurationL() <= delayTime)
+    if (getDurationL() <= delayTime){
         endL = std::chrono::steady_clock::now();
         if(command.size() > 1){            
             char stop[4096] = "stop";    

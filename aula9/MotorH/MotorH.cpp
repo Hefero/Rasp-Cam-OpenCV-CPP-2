@@ -10,8 +10,8 @@
 #include "MotorH.h"
 
 
-#define velDir 50
-#define velEsq 60
+#define velDir 80
+#define velEsq 100
 #define LEFT_TURN_DISTANCE 1
 #define RIGHT_TURN_DISTANCE 1
 
@@ -66,7 +66,7 @@ void motorH::hardStop(void)
 void motorH::turnLeft(void)
 {
     if (moving){
-        motorDir(1, 50);
+        motorDir(1, 40);
         motorEsq(0, 0);
     }
     if (!moving){
@@ -168,7 +168,7 @@ void motorH::execute(string& command, motorH& motor)
             if( strcmp(command.data(),b4) == 0 ){
                 std::cout << command << std::endl;
                 if (moving){
-                    motorDir(1, 100);
+                    motorDir(1, 80);
                     motorEsq(0, 0);
                 }
                 if (!moving){
@@ -202,7 +202,7 @@ void motorH::execute(string& command, motorH& motor)
                 std::cout << command << std::endl;
                 if (moving){
                     motorDir(0, 0);
-                    motorEsq(1, 100);
+                    motorEsq(1, 80);
                 }
                 if (!moving){
                     motorH::stop();

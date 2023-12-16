@@ -81,7 +81,7 @@ int mostFrequent(int* arr, int n)
 } 
 
 
-int outputNumber[25];
+int outputNumber[5];
 int output_index = 0;
 int mostFreq = -1;
 vector<unsigned char> compressed;
@@ -341,7 +341,7 @@ cv::putText(guiAuto, //target image
 
                             outputNumber[output_index] = int(mnist.ay(indices[0]));
                             output_index++;
-                            if(output_index == 25){
+                            if(output_index == 5){
                                 output_index = 0;
                                 int n = sizeof(outputNumber) / sizeof(outputNumber[0]);
                                 mostFreq = mostFrequent(outputNumber, n);
@@ -401,7 +401,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(600,600);
-    cascade.detectMultiScale( frame_gray, faces, 1.05, 3, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.01, 10, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -426,7 +426,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
 void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
 {
     if(faces.size() > 0){
-        if (faces[0].width < 80 && faces[0].width > 20){
+        if (faces[0].width < 100 && faces[0].width > 20){
             int Xrect = faces[0].x+faces[0].width/2;
             int Xcenter = 320;
             int epsilon = 70;
@@ -450,7 +450,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
         if (faces[0].width <= 20){
             rec.sendString("stop");
         }
-        if (faces[0].width >= 80){ //placa suficientemente grande para reconhecimento correto
+        if (faces[0].width >= 100){ //placa suficientemente grande para reconhecimento correto
             std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
             std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now();
             int duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
@@ -491,7 +491,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 4" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b2");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 1500 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b2");
                     endL = std::chrono::steady_clock::now();
@@ -502,7 +502,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
                 std::cout << "digito 5" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b2");
-                while (duration < 1000 ){ // 2 segundos
+                while (duration < 1500 ){ // 2 segundos
                     rec.recvBytes(compressed);
                     rec.sendString("b2");
                     endL = std::chrono::steady_clock::now();

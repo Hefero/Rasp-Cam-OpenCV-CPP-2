@@ -189,7 +189,7 @@ void motorH::execute(string& command, motorH& motor)
             }
             char b5[4096] = "b5";    
             if( strcmp(command.data(),b5) == 0 ){
-                moveForwardFull()
+                moveForwardFull();
             }
             char b6[4096] = "b6";    
             if( strcmp(command.data(),b6) == 0 ){

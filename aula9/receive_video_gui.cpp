@@ -405,7 +405,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(480,480);
-    cascade.detectMultiScale( frame_gray, faces, 1.03, 5, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.005, 20, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -494,10 +494,10 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             case 4: //Passe por baixo da placa e continue em frente.
                 std::cout << "digito 4" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                rec.sendString("b2");
-                while (duration < 10000 ){ // 2 segundos
+                rec.sendString("b5");
+                while (duration < 15000 ){ // 2 segundos
                     rec.recvBytes(compressed);
-                    rec.sendString("b2");
+                    rec.sendString("b5");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
                 }                
@@ -505,10 +505,10 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces)
             case 5: //Passe por baixo da placa e continue em frente.
                 std::cout << "digito 5" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                rec.sendString("b2");
-                while (duration < 10000 ){ // 2 segundos
+                rec.sendString("b5");
+                while (duration < 15000 ){ // 2 segundos
                     rec.recvBytes(compressed);
-                    rec.sendString("b2");
+                    rec.sendString("b5");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
                 }                

@@ -179,7 +179,7 @@ void motorH::execute(string& command, motorH& motor)
             if( strcmp(command.data(),b4) == 0 ){
                 std::cout << command << std::endl;
                 if (moving){
-                    motorDir(1, 90);
+                    motorDir(1, 70);
                     motorEsq(0, 0);
                 }
                 if (!moving){

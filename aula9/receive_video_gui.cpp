@@ -428,7 +428,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
     //-- Detect faces    
     Size minSize=Size(14,14);
     Size maxSize=Size(480,480);
-    cascade.detectMultiScale( frame_gray, faces, 1.05, 7, 0, minSize, maxSize);
+    cascade.detectMultiScale( frame_gray, faces, 1.02, 17, 0, minSize, maxSize);
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
@@ -453,7 +453,7 @@ void detectAndDisplay( Mat& frame, std::vector<Rect>& faces, int detected )
 void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter& out1, VideoWriter& out2)
 {
     if(faces.size() > 0){
-        if (faces[0].width < 100 && faces[0].width > 14){
+        if (faces[0].width < 150 && faces[0].width > 14){
             int Xrect = faces[0].x+faces[0].width/2;
             int Xcenter = 320;
             int epsilon = 70;
@@ -477,7 +477,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
         if (faces[0].width <= 14){
             rec.sendString("stop");
         }
-        if (faces[0].width >= 100){ //placa suficientemente grande para reconhecimento correto
+        if (faces[0].width >= 150){ //placa suficientemente grande para reconhecimento correto
             std::chrono::steady_clock::time_point beginL = std::chrono::steady_clock::now();
             std::chrono::steady_clock::time_point endL = std::chrono::steady_clock::now();
             int duration = std::chrono::duration_cast<std::chrono::microseconds>(endL - beginL).count();
@@ -507,7 +507,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
             case 3: //Vire 180 graus à direita imediatamente.
                 std::cout << "digito 3" << std::endl;
                 rec.sendString("b4");
-                while (duration < 6500 ){ // 2 segundos
+                while (duration < 5400 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();
@@ -518,7 +518,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
                 std::cout << "digito 4" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b5");
-                while (duration < 17000 ){ // 2 segundos
+                while (duration < 17500 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b5");
                     endL = std::chrono::steady_clock::now();
@@ -529,7 +529,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
                 std::cout << "digito 5" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b5");
-                while (duration <17000 ){ // 2 segundos
+                while (duration <17500 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b5");
                     endL = std::chrono::steady_clock::now();
@@ -550,10 +550,10 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
             case 7: //Vire 90 graus à esquerda imediatamente.
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
-                rec.sendString("b4");
-                while (duration < 3000 ){ // 2 segundos
+                rec.sendString("b9");
+                while (duration < 4000 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
-                    rec.sendString("b4");
+                    rec.sendString("b9");
                     endL = std::chrono::steady_clock::now();
                     duration = std::chrono::duration_cast<std::chrono::milliseconds>(endL - beginL).count();
                 }                

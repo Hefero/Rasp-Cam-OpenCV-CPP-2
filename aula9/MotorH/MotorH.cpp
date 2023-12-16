@@ -91,7 +91,7 @@ void motorH::turnRight(void)
 {
     if (moving){
         motorDir(0, 0);
-        motorEsq(1, 50);
+        motorEsq(1, 70);
     }
     if (!moving){
         stop();

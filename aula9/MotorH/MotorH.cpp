@@ -48,7 +48,7 @@ void motorH::moveForward()
 void motorH::moveForwardFull()
 {
     if (moving){    
-        motorDir(1, 100); 
+        motorDir(1, 80); 
         motorEsq(1, 100);
     }
     if (!moving){
@@ -90,7 +90,7 @@ void motorH::turnRight(void)
 {
     if (moving){
         motorDir(0, 0);
-        motorEsq(1, 60);
+        motorEsq(1, 50);
     }
     if (!moving){
         stop();
@@ -179,7 +179,7 @@ void motorH::execute(string& command, motorH& motor)
             if( strcmp(command.data(),b4) == 0 ){
                 std::cout << command << std::endl;
                 if (moving){
-                    motorDir(1, 70);
+                    motorDir(1, 90);
                     motorEsq(0, 0);
                 }
                 if (!moving){
@@ -189,8 +189,7 @@ void motorH::execute(string& command, motorH& motor)
             }
             char b5[4096] = "b5";    
             if( strcmp(command.data(),b5) == 0 ){
-                moveForwardFull();
-                std::cout << command << std::endl;
+                moveForwardFull()
             }
             char b6[4096] = "b6";    
             if( strcmp(command.data(),b6) == 0 ){

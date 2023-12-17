@@ -507,7 +507,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
             case 3: //Vire 180 graus à direita imediatamente.
                 std::cout << "digito 3" << std::endl;
                 rec.sendString("b4");
-                while (duration < 15000 ){ // 2 segundos
+                while (duration < 17000 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();

@@ -507,7 +507,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
             case 3: //Vire 180 graus à direita imediatamente.
                 std::cout << "digito 3" << std::endl;
                 rec.sendString("b4");
-                while (duration < 5250 ){ // 2 segundos
+                while (duration < 15000 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();
@@ -540,7 +540,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
                 std::cout << "digito 6" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b4");
-                while (duration < 2950 ){ // 2 segundos
+                while (duration < 10000 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b4");
                     endL = std::chrono::steady_clock::now();
@@ -551,7 +551,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
                 std::cout << "digito 7" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b9");
-                while (duration < 5200 ){ // 2 segundos
+                while (duration < 16000 ){ // 2 segundos
                     formImage(rec,mostFreq,out1,out2);
                     rec.sendString("b9");
                     endL = std::chrono::steady_clock::now();
@@ -562,7 +562,7 @@ void sendFollow(Receiver& rec, Mat& frame, std::vector<Rect>& faces, VideoWriter
                 std::cout << "digito 8" << std::endl;
                 //std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::microseconds>(end - beginL).count()  << "[µs]" << std::endl;
                 rec.sendString("b9");
-                while (duration < 4000 ){ // 2 segundos
+                while (duration < 14500 ){ // 2 segundos
                     //formImage(rec,mostFreq,out1,out2);
                     //rec.sendString("stop");
                     formImage(rec,mostFreq,out1,out2);

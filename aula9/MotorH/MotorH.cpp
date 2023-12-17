@@ -48,8 +48,8 @@ void motorH::moveForward()
 void motorH::moveForwardFull()
 {
     if (moving){
-        motorEsq(1, 100);    
-        motorDir(1, 68); 
+        motorEsq(1, 95);    
+        motorDir(1, 69); 
         
     }
     if (!moving){

@@ -180,7 +180,7 @@ void motorH::execute(string& command, motorH& motor)
             if( strcmp(command.data(),b4) == 0 ){
                 std::cout << command << std::endl;
                 if (moving){
-                    motorDir(1, 80);
+                    motorDir(1, 60);
                     motorEsq(0, 0);
                 }
                 if (!moving){
@@ -213,7 +213,7 @@ void motorH::execute(string& command, motorH& motor)
                 std::cout << command << std::endl;
                 if (moving){
                     motorDir(0, 0);
-                    motorEsq(1, 80);
+                    motorEsq(1, 70);
                 }
                 if (!moving){
                     motorH::stop();
